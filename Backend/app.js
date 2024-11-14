@@ -4,8 +4,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { config } from "dotenv";
 import fileUpload from "express-fileupload";
-// import { errorMiddleware } from "./middlewares/error.js";
-// import messageRouter from "./router/messageRouter.js";
+import messageRouter from "./routes/messageRouter.js";
+import { errorMiddleware } from "./middlewares/errorMiddleware.js";
+
 // import userRouter from "./router/userRouter.js";
 // import appointmentRouter from "./router/appointmentRouter.js";
 
@@ -30,11 +31,12 @@ app.use(
       tempFileDir: "/tmp/",
     })
   );
-//   app.use("/api/v1/message", messageRouter);
+  app.use("/api/v1/message", messageRouter);
 //   app.use("/api/v1/user", userRouter);
 //   app.use("/api/v1/appointment", appointmentRouter);
 
   dbConnection();
-//   app.use(errorMiddleware);
+  app.use(errorMiddleware);
 
 export default app;
+

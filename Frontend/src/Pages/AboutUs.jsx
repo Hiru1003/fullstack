@@ -17,13 +17,13 @@ const AboutUs = () => {
           </p>
         </div>
         <div className="banner">
-          <img src={"/about.png"} alt="hero" />
+          <img src={"/docillus3.webp"} alt="hero" />
           <span>
             <img src="/Vector.png" alt="vector" />
           </span>
         </div>
       </div>
-      <Biography imageUrl={"/pic1.png"} />
+      <Biography imageUrl={"/docillus4.webp"} />
     </>
   );
 };

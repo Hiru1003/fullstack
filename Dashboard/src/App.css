@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -25,7 +26,7 @@ body {
   
 .page {
   margin-left: 120px;
-  background: #e5e5e5;
+  background: #eeeeee;
   padding: 40px;
   height: 100vh;
   border-top-left-radius: 50px;
@@ -56,7 +57,7 @@ body {
   padding-top: 40px;
   padding-bottom: 60px;
   min-height: 100vh;
-  background: #e5e5e5;
+  background: #eeeeee;
 
   display: flex;
   justify-content: center;
@@ -180,8 +181,8 @@ body {
   padding: 20px 20px 0 10px;
 }
 .dashboard .banner:first-child .firstBox img {
-  height: 100%;
-  flex: 1;
+  height: 80%;
+  flex: 2;
 }
 .dashboard .banner:first-child .firstBox .content {
   flex: 2;
@@ -203,12 +204,12 @@ body {
   font-size: 16px;
 }
 .dashboard .banner:first-child .secondBox {
-  background: #3939d9f2;
+  background: #6c6ceaf2;
   color: #fff;
 }
 .dashboard .banner:first-child .thirdBox {
-  color: #ff008d;
-  background: #fff;
+  background: #6c6ceaf2;
+  color: #fff;
 }
 .dashboard .banner:first-child .secondBox,
 .dashboard .banner:first-child .thirdBox {
@@ -360,8 +361,8 @@ body {
   padding: 70px 0;
 }
 .sidebar svg {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   font-size: 34px;
 }
 .sidebar svg:hover {
@@ -374,7 +375,7 @@ body {
 .sidebar .links {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 50px;
 }
 .wrapper {
   display: none;
@@ -458,10 +459,11 @@ body {
   font-size: 20px;
 }
 .doctors .banner .card div p {
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 18px;
 }
 .doctors .banner .card div p span {
-  font-weight: 500;
+  font-weight: 300;
 }
 
 @media (max-width: 350px) {
@@ -504,7 +506,7 @@ body {
   padding-top: 40px;
   padding-bottom: 60px;
   min-height: 100vh;
-  background: #e5e5e5;
+  background: #eeeeee;
   display: flex;
   justify-content: center;
   flex-direction: column;

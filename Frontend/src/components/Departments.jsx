@@ -6,39 +6,39 @@ const Departments = () => {
   const departmentsArray = [
     {
       name: "Pediatrics",
-      imageUrl: "/departments/pedia.jpeg",
+      imageUrl: "/departments/Pediatrics.jpg",
     },
     {
       name: "Orthopedics",
-      imageUrl: "/departments/ortho.jpeg",
+      imageUrl: "/departments/Orthopedics.jpg",
     },
     {
       name: "Cardiology",
-      imageUrl: "/departments/cardio.jpeg",
+      imageUrl: "/departments/cardiology.avif",
     },
     {
       name: "Neurology",
-      imageUrl: "/departments/neuro.jpeg",
+      imageUrl: "/departments/neurology.jpg",
     },
     {
       name: "Oncology",
-      imageUrl: "/departments/onco.jpeg",
+      imageUrl: "/departments/Oncology.avif",
     },
     {
       name: "Radiology",
-      imageUrl: "/departments/radio.jpeg",
+      imageUrl: "/departments/Radiology.jpg",
     },
     {
       name: "Physical Therapy",
-      imageUrl: "/departments/therapy.jpeg",
+      imageUrl: "/departments/Physical Therapy.avif",
     },
     {
       name: "Dermatology",
-      imageUrl: "/departments/derma.jpeg",
+      imageUrl: "/departments/Dermatology.avif",
     },
     {
       name: "ENT",
-      imageUrl: "/departments/ent.jpeg",
+      imageUrl: "/departments/ENT.jpg",
     },
   ];
 

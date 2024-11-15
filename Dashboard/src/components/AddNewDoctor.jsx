@@ -16,8 +16,6 @@ const AddNewDoctor = () => {
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
   const [doctorDepartment, setDoctorDepartment] = useState("");
-  const [docAvatar, setDocAvatar] = useState("");
-  const [docAvatarPreview, setDocAvatarPreview] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
 
   const navigateTo = useNavigate();
@@ -34,40 +32,32 @@ const AddNewDoctor = () => {
     "ENT",
   ];
 
-  const handleAvatar = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setDocAvatarPreview(reader.result);
-      setDocAvatar(file);
-    };
-  };
-
   const handleAddNewDoctor = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append("firstName", firstName);
-      formData.append("lastName", lastName);
-      formData.append("email", email);
-      formData.append("phone", phone);
-      formData.append("password", password);
-      formData.append("nic", nic);
-      formData.append("dob", dob);
-      formData.append("gender", gender);
-      formData.append("doctorDepartment", doctorDepartment);
-      formData.append("docAvatar", docAvatar);
-      formData.append("avatarUrl", avatarUrl);
+      const doctorData = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        nic,
+        dob,
+        gender,
+        password,
+        doctorDepartment,
+        avatarUrl, // Sending avatarUrl as a string
+      };
+
       await axios
-        .post("http://localhost:4000/api/v1/user/doctor/addnew", formData, {
+        .post("http://localhost:4000/api/v1/user/doctor/addnew", doctorData, {
           withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "application/json" },
         })
         .then((res) => {
           toast.success(res.data.message);
           setIsAuthenticated(true);
           navigateTo("/");
+          // Reset form fields after successful submission
           setFirstName("");
           setLastName("");
           setEmail("");
@@ -76,10 +66,11 @@ const AddNewDoctor = () => {
           setDob("");
           setGender("");
           setPassword("");
+          setDoctorDepartment("");
           setAvatarUrl("");
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -89,7 +80,7 @@ const AddNewDoctor = () => {
 
   return (
     <section className="page">
-      <section className="container doctor-form-component  add-doctor-form">
+      <section className="container doctor-form-component add-doctor-form">
         <img src="/logo.png" alt="logo" className="logo" />
         <h1 className="form-title">REGISTER A NEW DOCTOR</h1>
         <form onSubmit={handleAddNewDoctor}>
@@ -101,47 +92,82 @@ const AddNewDoctor = () => {
                   placeholder="First Name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 />
                 <input
                   type="text"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 />
                 <input
                   type="number"
                   placeholder="Mobile Number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 />
                 <input
                   type="number"
                   placeholder="NIC"
                   value={nic}
                   onChange={(e) => setNic(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 />
                 <input
                   type="date"
                   placeholder="Date of Birth"
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 />
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
@@ -152,12 +178,22 @@ const AddNewDoctor = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 />
                 <select
                   value={doctorDepartment}
                   onChange={(e) => setDoctorDepartment(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                  }}
                 >
                   <option value="">Select Department</option>
                   {departmentsArray.map((depart, index) => (
@@ -167,26 +203,30 @@ const AddNewDoctor = () => {
                   ))}
                 </select>
 
-                {/* Add the image URL input */}
+                {/* Image URL input */}
                 <input
                   type="text"
-                  placeholder="Doctor Image (optional)"
+                  placeholder="Doctor Image URL (optional)"
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
-                  style={{ textAlign: "center", width: "100%", marginBottom: "15px" }}
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    fontSize: "18px",
+                  }}
                 />
               </div>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 style={{
-                  display: "block", 
-                  margin: "20px auto", 
-                  padding: "10px 20px", 
-                  backgroundColor: "#4CAF50", 
-                  color: "white", 
-                  border: "none", 
+                  display: "block",
+                  margin: "10px auto",
+                  padding: "10px",
+                  backgroundColor: "#4CAF50",
+                  color: "white",
+                  border: "none",
                   borderRadius: "5px",
-                  fontSize: "16px"
+                  fontSize: "16px",
                 }}
               >
                 Register New Doctor

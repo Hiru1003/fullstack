@@ -1,5 +1,4 @@
 import React from "react";
-import Hero from "../components/Hero";
 import AppointmentForm from "../components/AppointmentForm";
 
 const Appointment = () => {
@@ -18,7 +17,7 @@ const Appointment = () => {
           </p>
         </div>
         <div className="banner">
-          <img src={"/appoinment.png"} alt="hero"  />
+          <img src={"/docillus5.webp"} alt="hero"  />
           <span>
             <img src="/Vector.png" alt="vector" />
           </span>

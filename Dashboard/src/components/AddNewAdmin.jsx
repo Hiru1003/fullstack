@@ -62,12 +62,14 @@ const AddNewAdmin = () => {
             <input
               type="text"
               placeholder="First Name"
+              style={{fontSize: '18px'}}
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
             <input
               type="text"
               placeholder="Last Name"
+              style={{fontSize: '18px'}}
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
@@ -76,12 +78,14 @@ const AddNewAdmin = () => {
             <input
               type="text"
               placeholder="Email"
+              style={{fontSize: '18px'}}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="number"
               placeholder="Mobile Number"
+              style={{fontSize: '18px'}}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
@@ -90,18 +94,20 @@ const AddNewAdmin = () => {
             <input
               type="number"
               placeholder="NIC"
+              style={{fontSize: '18px'}}
               value={nic}
               onChange={(e) => setNic(e.target.value)}
             />
             <input
               type={"date"}
               placeholder="Date of Birth"
+              style={{fontSize: '18px'}}
               value={dob}
               onChange={(e) => setDob(e.target.value)}
             />
           </div>
           <div>
-            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+            <select value={gender} onChange={(e) => setGender(e.target.value)} style={{fontSize: '18px'}}>
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -109,12 +115,13 @@ const AddNewAdmin = () => {
             <input
               type="password"
               placeholder="Password"
+              style={{fontSize: '18px'}}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div style={{ justifyContent: "center", alignItems: "center" }}>
-            <button type="submit">ADD NEW ADMIN</button>
+          <div style={{ justifyContent: "center", alignItems: "center" ,fontSize: '18px'}}>
+            <button type="submit" style={{fontSize: '18px'}}>ADD NEW ADMIN</button>
           </div>
         </form>
       </section>

@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <>
    <Hero/>
-   <Biography imageUrl={"/about.png"} />
+   <Biography imageUrl={"/docillus2.png"} />
    <Departments/>
    <MessageForm/>
 

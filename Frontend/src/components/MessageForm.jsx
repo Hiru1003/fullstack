@@ -31,10 +31,15 @@ const MessageForm = () => {
           setMessage("");
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      const errorMessage =
+        error.response && error.response.data && error.response.data.message
+          ? error.response.data.message
+          : "Network error or CORS issue. Please check your server.";
+      toast.error(errorMessage);
+      console.error("Error:", error);
     }
   };
-
+  
   return (
     <>
       <div className="container form-component message-form">

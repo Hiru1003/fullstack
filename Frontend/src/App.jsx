@@ -13,7 +13,9 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { Context } from "./main";
 
+
 const App = () => {
+
   const { isAuthenticated, setIsAuthenticated, setUser } =
     useContext(Context);
 

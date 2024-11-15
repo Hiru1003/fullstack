@@ -118,6 +118,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
       gender,
       password,
       doctorDepartment,
+      docAvatar,  // Add this to capture image URL if provided
     } = req.body;
   
     // Check for required fields except for docAvatar
@@ -141,33 +142,40 @@ export const login = catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("Doctor With This Email Already Exists!", 400));
     }
   
-    // Handle avatar if provided
+    // Initialize docAvatarData to null
     let docAvatarData = null;
-    if (req.files && req.files.docAvatar) {
-      const { docAvatar } = req.files;
-      const allowedFormats = ["image/png", "image/jpeg", "image/webp"];
-      if (!allowedFormats.includes(docAvatar.mimetype)) {
-        return next(new ErrorHandler("File Format Not Supported!", 400));
-      }
   
-      // Upload to Cloudinary if docAvatar exists
-      const cloudinaryResponse = await cloudinary.uploader.upload(
-        docAvatar.tempFilePath
-      );
-      if (!cloudinaryResponse || cloudinaryResponse.error) {
-        console.error(
-          "Cloudinary Error:",
-          cloudinaryResponse.error || "Unknown Cloudinary error"
-        );
-        return next(
-          new ErrorHandler("Failed To Upload Doctor Avatar To Cloudinary", 500)
-        );
+    // Check if docAvatar is an image URL or file
+    if (docAvatar) {
+      // If docAvatar is a URL, store the URL string directly
+      if (docAvatar.startsWith('http') || docAvatar.startsWith('https')) {
+        docAvatarData = docAvatar; 
       }
+      // If docAvatar is a file, handle it as an image file
+      else if (req.files && req.files.docAvatar) {
+        const { docAvatar: uploadedFile } = req.files;
+        const allowedFormats = ["image/png", "image/jpeg", "image/webp"];
+        if (!allowedFormats.includes(uploadedFile.mimetype)) {
+          return next(new ErrorHandler("File Format Not Supported!", 400));
+        }
   
-      docAvatarData = {
-        public_id: cloudinaryResponse.public_id,
-        url: cloudinaryResponse.secure_url,
-      };
+        // Upload to Cloudinary if docAvatar exists
+        const cloudinaryResponse = await cloudinary.uploader.upload(
+          uploadedFile.tempFilePath
+        );
+        if (!cloudinaryResponse || cloudinaryResponse.error) {
+          console.error(
+            "Cloudinary Error:",
+            cloudinaryResponse.error || "Unknown Cloudinary error"
+          );
+          return next(
+            new ErrorHandler("Failed To Upload Doctor Avatar To Cloudinary", 500)
+          );
+        }
+  
+        // Set docAvatarData to Cloudinary URL and public_id if uploaded via Cloudinary
+        docAvatarData = cloudinaryResponse.secure_url;
+      }
     }
   
     // Create doctor with optional avatar data
@@ -182,7 +190,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
       password,
       role: "Doctor",
       doctorDepartment,
-      docAvatar: docAvatarData, // Assign avatar data if available
+      docAvatar: docAvatarData, // Store the image URL or Cloudinary URL
     });
   
     res.status(200).json({
@@ -191,6 +199,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
       doctor,
     });
   });
+  
   
 
   

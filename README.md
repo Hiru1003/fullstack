@@ -2,15 +2,15 @@ MERN - Hospital Management System
 
 Backend :
 
-cd Backend
+cd Backend </br>
 npm run dev
 
 Frontend :
 
-cd Frotnend
+cd Frotend </br>
 npm run dev
 
 Dashboard :
 
-cd Dashboard
+cd Dashboard </br>
 npm run dev

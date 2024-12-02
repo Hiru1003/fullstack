@@ -10,6 +10,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Context } from "../main";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { FaPeopleGroup } from "react-icons/fa6";
+
 
 const Sidebar = () => {
   const [show, setShow] = useState(false);
@@ -40,12 +43,20 @@ const Sidebar = () => {
     navigateTo("/doctors");
     setShow(!show);
   };
+  const gotoStaffPage = () => {
+    navigateTo("/staff");
+    setShow(!show);
+  };
   const gotoMessagesPage = () => {
     navigateTo("/messages");
     setShow(!show);
   };
   const gotoAddNewDoctor = () => {
     navigateTo("/doctor/addnew");
+    setShow(!show);
+  };
+  const gotoaddNewStaffMember= () => {
+    navigateTo("/staff/addnew");
     setShow(!show);
   };
   const gotoAddNewAdmin = () => {
@@ -62,8 +73,10 @@ const Sidebar = () => {
         <div className="links">
           <TiHome onClick={gotoHomePage} />
           <FaUserDoctor onClick={gotoDoctorsPage} />
+          <FaPeopleGroup onClick={gotoStaffPage}/>
           <MdAddModerator onClick={gotoAddNewAdmin} />
           <IoPersonAddSharp onClick={gotoAddNewDoctor} />
+          <AiOutlineUsergroupAdd onClick={gotoaddNewStaffMember} />
           <AiFillMessage onClick={gotoMessagesPage} />
           <RiLogoutBoxFill onClick={handleLogout} />
         </div>

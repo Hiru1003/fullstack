@@ -6,42 +6,48 @@ import { config } from "dotenv";
 import fileUpload from "express-fileupload";
 import messageRouter from "./routes/messageRouter.js";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
-
 import userRouter from "./routes/userRouter.js";
 import appointmentRouter from "./routes/appointmentRouter.js";
 
 const app = express();
-config({path: "./config/config.env"})
 
+// Load environment variables
+config({ path: "./config/config.env" });
+
+// Database connection should be established first
+dbConnection();
+
+// Set up CORS
 app.use(
-    cors({
-      origin: [process.env.FRONTEND_URL, process.env.DASHBOARD_URL],
-      method: ["GET", "POST", "DELETE", "PUT"],
-      credentials: true,
-    })
-  );
+  cors({
+    origin: [process.env.FRONTEND_URL, process.env.DASHBOARD_URL],
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    credentials: true,
+  })
+);
 
-  app.use(cookieParser());
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+// Middleware setup
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 
-  app.use(
-    fileUpload({
-      useTempFiles: true,
-      tempFileDir: "/tmp/",
-    })
-  );
-  app.use("/api/v1/message", messageRouter);
-  app.use("/api/v1/user", userRouter);
-  app.use("/api/v1/appointment", appointmentRouter);
+// Routes
+app.use("/api/v1/message", messageRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/appointment", appointmentRouter);
 
-
+// A simple root route for testing the backend
 app.get("/", (req, res) => {
   res.send("Welcome to the backend API!");
 });
 
-  dbConnection();
-  app.use(errorMiddleware);
+// Error handling middleware should be at the end
+app.use(errorMiddleware);
 
 export default app;
-

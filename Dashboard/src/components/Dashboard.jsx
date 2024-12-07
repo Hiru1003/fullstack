@@ -30,6 +30,7 @@ const Dashboard = () => {
         `https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/update/${appointmentId}`,
         { status },
         { withCredentials: true }
+        
       );
       setAppointments((prevAppointments) =>
         prevAppointments.map((appointment) =>

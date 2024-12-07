@@ -26,6 +26,10 @@ app.use(
   })
 );
 
+console.log("PORT:", process.env.PORT);
+console.log("MONGO_URI:", process.env.MONGO_URI);
+
+
 // Middleware setup
 app.use(cookieParser());
 app.use(express.json());

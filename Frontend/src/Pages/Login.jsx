@@ -45,11 +45,11 @@ const Login = () => {
   return (
     <>
       <div className="container form-component login-form">
+        <br/><br/><br/>
         <h2>Sign In</h2>
         <p>Please Login To Continue</p>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat culpa
-          voluptas expedita itaque ex, totam ad quod error?
+        Welcome back! Log in to your account and take control of your health journey, from appointments to personalized care.
         </p>
         <form onSubmit={handleLogin}>
           <input

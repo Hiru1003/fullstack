@@ -149,7 +149,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
     if (docAvatar) {
       // If docAvatar is a URL, store the URL string directly
       if (docAvatar.startsWith('http') || docAvatar.startsWith('https')) {
-        docAvatarData = docAvatar; 
+        docAvatarData = docAvatar;
       }
       // If docAvatar is a file, handle it as an image file
       else if (req.files && req.files.docAvatar) {
@@ -164,16 +164,11 @@ export const login = catchAsyncErrors(async (req, res, next) => {
           uploadedFile.tempFilePath
         );
         if (!cloudinaryResponse || cloudinaryResponse.error) {
-          console.error(
-            "Cloudinary Error:",
-            cloudinaryResponse.error || "Unknown Cloudinary error"
-          );
-          return next(
-            new ErrorHandler("Failed To Upload Doctor Avatar To Cloudinary", 500)
-          );
+          console.error("Cloudinary Error:", cloudinaryResponse.error || "Unknown Cloudinary error");
+          return next(new ErrorHandler("Failed To Upload Doctor Avatar To Cloudinary", 500));
         }
   
-        // Set docAvatarData to Cloudinary URL and public_id if uploaded via Cloudinary
+        // Set docAvatarData to Cloudinary URL if uploaded via Cloudinary
         docAvatarData = cloudinaryResponse.secure_url;
       }
     }
@@ -199,6 +194,8 @@ export const login = catchAsyncErrors(async (req, res, next) => {
       doctor,
     });
   });
+  
+  
   
   
 
@@ -343,6 +340,8 @@ export const addNewStaffMember = catchAsyncErrors(async (req, res, next) => {
     staffAvatar, // Ensure you're receiving this from the frontend
   } = req.body;
 
+  console.log("Received staffAvatar:", staffAvatar); // Log to confirm data
+
   // Check for required fields except for staffAvatar
   if (
     !firstName ||
@@ -424,9 +423,6 @@ export const addNewStaffMember = catchAsyncErrors(async (req, res, next) => {
 
 
 
-
-
-// Delete a staff member
 export const deleteStaffMember = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
 

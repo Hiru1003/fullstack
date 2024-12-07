@@ -16,7 +16,7 @@ const AddNewDoctor = () => {
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
   const [doctorDepartment, setDoctorDepartment] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [docavatarUrl, setAvatarUrl] = useState("");
 
   const navigateTo = useNavigate();
 
@@ -45,7 +45,7 @@ const AddNewDoctor = () => {
         gender,
         password,
         doctorDepartment,
-        avatarUrl, // Sending avatarUrl as a string
+        docAvatar: docavatarUrl, 
       };
 
       await axios
@@ -207,7 +207,7 @@ const AddNewDoctor = () => {
                 <input
                   type="text"
                   placeholder="Doctor Image URL (optional)"
-                  value={avatarUrl}
+                  value={docavatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
                   style={{
                     textAlign: "center",

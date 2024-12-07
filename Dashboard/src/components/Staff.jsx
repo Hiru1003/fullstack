@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom";
 import { FaTrash, FaEdit } from "react-icons/fa";
 
 const Staff = () => {
-  const [Staff, setStaff] = useState([]);
+  const [staff, setStaff] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [editedStaff, setEditedStaff] = useState({});
   const { isAuthenticated } = useContext(Context);
@@ -34,9 +34,8 @@ const Staff = () => {
           { withCredentials: true }
         );
         setStaff((prevStaff) =>
-            prevStaff.filter((staff) => staff._id !== staffId)
+          prevStaff.filter((staff) => staff._id !== staffId)
         );
-        
         toast.success(response.data.message);
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to delete staff");
@@ -80,43 +79,41 @@ const Staff = () => {
     <section className="page doctors">
       <h1>Staff</h1>
       <div className="banner">
-  {Staff && Staff.length > 0 ? (
-    Staff.map((staff) => (
-      <div className="card" key={staff._id}>
-        <button
-          className="delete-button"
-          onClick={() => handleDelete(staff._id)}
-          title="Delete Staff Member"
-        >
-          <FaTrash />
-        </button>
-        <button
-          className="edit-button"
-          onClick={() => handleEdit(staff)}
-          title="Edit staff"
-        >
-          <FaEdit />
-        </button>
-
-        <img
-  src={
-    staff.Avatar && // Ensure the Avatar key is correct
-    (staff.Avatar.startsWith("http") 
-      ? staff.Avatar 
-      : staff.Avatar.url) // If Avatar is an object with a URL, access the .url property
-  }
-  alt="staff avatar"
-  style={{
-    width: "100px",
-    height: "100px",
-    objectFit: "cover",
-  }}
-/>
-
-
-        <h4>{`${staff.firstName} ${staff.lastName}`}</h4>
-        <div className="details">
-          <p>
+        {staff && staff.length > 0 ? (
+          staff.map((staff) => (
+            <div className="card" key={staff._id}>
+              <button
+                className="delete-button"
+                onClick={() => handleDelete(staff._id)}
+                title="Delete Staff Member"
+              >
+                <FaTrash />
+              </button>
+              <button
+                className="edit-button"
+                onClick={() => handleEdit(staff)}
+                title="Edit staff"
+              >
+                <FaEdit />
+              </button>
+              <img
+                src={
+                  staff.staffAvatar &&
+                  (staff.staffAvatar.startsWith("http")
+                    ? staff.staffAvatar
+                    : staff.staffAvatar.url)
+                }
+                alt="staff avatar"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  objectFit: "cover",
+                }}
+              />
+              
+              <h4>{`${staff.firstName} ${staff.lastName}`}</h4>
+              <div className="details">
+              <p>
             Email:{" "}
             <span>
               {editMode && editedStaff._id === staff._id ? (
@@ -131,6 +128,7 @@ const Staff = () => {
               )}
             </span>
           </p>
+
           <p>
             Phone:{" "}
             <span>
@@ -146,6 +144,7 @@ const Staff = () => {
               )}
             </span>
           </p>
+
           <p>
             DOB:{" "}
             <span>
@@ -161,22 +160,31 @@ const Staff = () => {
               )}
             </span>
           </p>
-          <p>
-            Department:{" "}
-            <span>
-              {editMode && editedStaff._id === staff._id ? (
-                <input
-                  type="text"
-                  name="staffDepartment"
-                  value={editedStaff.staffDepartment}
-                  onChange={handleChange}
-                />
-              ) : (
-                staff.staffDepartment
-              )}
-            </span>
-          </p>
-          <p>
+
+
+
+                <p>
+                  Department:{" "}
+                  <span>
+                    {editMode && editedStaff._id === staff._id ? (
+                      <select
+                        name="department"
+                        value={editedStaff.department}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select Department</option>
+                        <option value="HR">HR</option>
+                        <option value="IT">IT</option>
+                        <option value="Finance">Finance</option>
+                      </select>
+                    ) : (
+                      staff.department
+                    )}
+                  </span>
+                </p>
+
+                
+                <p>
             NIC:{" "}
             <span>
               {editMode && editedStaff._id === staff._id ? (
@@ -206,19 +214,18 @@ const Staff = () => {
               )}
             </span>
           </p>
-        </div>
-        {editMode && editedStaff._id === staff._id && (
-          <button className="save-button" onClick={handleSave}>
-            Save
-          </button>
+              </div>
+              {editMode && editedStaff._id === staff._id && (
+                <button className="save-button" onClick={handleSave}>
+                  Save
+                </button>
+              )}
+            </div>
+          ))
+        ) : (
+          <h1>No Registered Staff Member Found!</h1>
         )}
       </div>
-    ))
-  ) : (
-    <h1>No Registered Staff Member Found!</h1>
-  )}
-</div>
-
 
       <style jsx>{`
         .delete-button {

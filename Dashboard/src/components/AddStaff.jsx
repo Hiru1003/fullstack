@@ -30,6 +30,7 @@ const addNewStaffMember = () => {
     "Physical Therapy Assistant",
   ];
 
+
   const handleaddNewStaffMember = async (e) => {
     e.preventDefault();
     try {
@@ -42,9 +43,12 @@ const addNewStaffMember = () => {
         dob,
         gender,
         password,
-        staffDepartment,
-        staffAvatar: avatarUrl,
+        department: staffDepartment,
+        staffAvatar: avatarUrl, 
       };
+  
+      // Log the data to ensure avatarUrl is correct
+      console.log(staffData);
   
       await axios
         .post("http://localhost:4000/api/v1/user/staff/addnew", staffData, {
@@ -65,12 +69,13 @@ const addNewStaffMember = () => {
           setGender("");
           setPassword("");
           setStaffDepartment("");
-          setAvatarUrl("");
+          setAvatarUrl(""); // Reset avatar URL
         });
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+  
   
 
   if (!isAuthenticated) {
@@ -183,9 +188,10 @@ const addNewStaffMember = () => {
                     fontSize: "18px",
                   }}
                 />
-                <select
+              
+              <select
                   value={staffDepartment}
-                  onChange={(e) => setDoctorDepartment(e.target.value)}
+                  onChange={(e) => setStaffDepartment(e.target.value)}
                   style={{
                     textAlign: "center",
                     width: "100%",
@@ -194,17 +200,18 @@ const addNewStaffMember = () => {
                   }}
                 >
                   <option value="">Select Department</option>
-                  {departmentsArray.map((depart, index) => (
-                    <option value={depart} key={index}>
-                      {depart}
+                  {departmentsArray.map((department, index) => (
+                    <option key={index} value={department}>
+                      {department}
                     </option>
                   ))}
                 </select>
 
+
                 {/* Image URL input */}
                 <input
                   type="text"
-                  placeholder="Doctor Image URL (optional)"
+                  placeholder="Staff Image URL (optional)"
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
                   style={{

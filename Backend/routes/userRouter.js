@@ -29,6 +29,8 @@ router.post("/login", login);
 router.post("/admin/addnew",isAdminAuthenticated, addNewAdmin);
 router.post("/doctor/addnew", isAdminAuthenticated, addNewDoctor);
 router.post("/staff/addnew", isAdminAuthenticated, addNewStaffMember);
+router.put("/staff/:id", isAdminAuthenticated, editStaffMember);
+router.delete("/staff/:id", isAdminAuthenticated, deleteStaffMember);
 router.get("/admin/me", isAdminAuthenticated, getUserDetails);
 router.get("/patient/me", isPatientAuthenticated, getUserDetails);
 router.get("/doctors", getAllDoctors);

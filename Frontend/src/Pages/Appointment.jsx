@@ -6,7 +6,7 @@ const Appointment = () => {
     <>
       <div className="hero container">
         <div className="banner">
-          <h1>{"Schedule Your Appointment | Medicare Medical Institute"}</h1>
+          <h1>{"Schedule Your Appointment"}</h1>
           <p>
           Medicare Medical Institute is a state-of-the-art facility dedicated
             to providing comprehensive healthcare services with compassion and

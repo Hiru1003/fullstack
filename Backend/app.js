@@ -35,6 +35,11 @@ app.use(
   app.use("/api/v1/user", userRouter);
   app.use("/api/v1/appointment", appointmentRouter);
 
+
+app.get("/", (req, res) => {
+  res.send("Welcome to the backend API!");
+});
+
   dbConnection();
   app.use(errorMiddleware);
 

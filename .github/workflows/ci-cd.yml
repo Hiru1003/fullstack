@@ -1,0 +1,75 @@
+name: Full Stack CI/CD
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull requests to the main branch
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest  # Run the job on the latest Ubuntu environment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: frontend
+
+      - name: Set up Node.js for Frontend
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Make sure you use the correct Node.js version
+
+      - name: Install dependencies for Frontend
+        run: |
+          cd frontend
+          npm install
+
+      - name: Run tests for Frontend
+        run: |
+          cd frontend
+          npm test  # Ensure you have tests in your frontend app
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build  # Build the production version of the frontend
+
+      - name: Deploy Frontend to Vercel
+        run: |
+          cd frontend
+          vercel --prod --token ${{ secrets.VERCEL_TOKEN }}  # Deploy using your Vercel token
+          
+  backend:
+    runs-on: ubuntu-latest  # Run the job on the latest Ubuntu environment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: backend
+
+      - name: Set up Node.js for Backend
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Ensure you use the correct Node.js version
+
+      - name: Install dependencies for Backend
+        run: |
+          cd backend
+          npm install
+
+      - name: Run tests for Backend
+        run: |
+          cd backend
+          npm test  # Ensure you have tests in your backend app
+
+      - name: Deploy Backend to Heroku
+        run: |
+          git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
+          git push heroku main  # Push to Heroku for deployment
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # Your Heroku API key

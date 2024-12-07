@@ -49,7 +49,7 @@ const AddNewDoctor = () => {
       };
 
       await axios
-        .post("http://localhost:4000/api/v1/user/doctor/addnew", doctorData, {
+        .post("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/doctor/addnew", doctorData, {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         })

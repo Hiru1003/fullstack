@@ -15,7 +15,7 @@ const Doctors = () => {
     const fetchDoctors = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4000/api/v1/user/doctors",
+          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/doctors",
           { withCredentials: true }
         );
         setDoctors(data.doctors);
@@ -30,7 +30,7 @@ const Doctors = () => {
     if (window.confirm("Are you sure you want to delete this doctor?")) {
       try {
         const response = await axios.delete(
-          `http://localhost:4000/api/v1/user/doctors/${doctorId}`,
+          `https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/doctors/${doctorId}`,
           { withCredentials: true }
         );
         setDoctors((prevDoctors) =>
@@ -51,7 +51,7 @@ const Doctors = () => {
   const handleSave = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/v1/user/doctors/${editedDoctor._id}`,
+        `https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/doctors/${editedDoctor._id}`,
         editedDoctor,
         { withCredentials: true }
       );

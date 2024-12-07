@@ -51,7 +51,7 @@ const addNewStaffMember = () => {
       console.log(staffData);
   
       await axios
-        .post("http://localhost:4000/api/v1/user/staff/addnew", staffData, {
+        .post("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/staff/addnew", staffData, {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         })

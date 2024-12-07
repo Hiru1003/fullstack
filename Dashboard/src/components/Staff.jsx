@@ -15,7 +15,7 @@ const Staff = () => {
     const fetchStaff = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4000/api/v1/user/staff",
+          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/staff",
           { withCredentials: true }
         );
         setStaff(data.staff);
@@ -30,7 +30,7 @@ const Staff = () => {
     if (window.confirm("Are you sure you want to delete this staff member?")) {
       try {
         const response = await axios.delete(
-          `http://localhost:4000/api/v1/user/staff/${staffId}`,
+          `https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/staff/${staffId}`,
           { withCredentials: true }
         );
         setStaff((prevStaff) =>
@@ -51,7 +51,7 @@ const Staff = () => {
   const handleSave = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/v1/user/staff/${editedStaff._id}`,
+        `https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/staff/${editedStaff._id}`,
         editedStaff,
         { withCredentials: true }
       );

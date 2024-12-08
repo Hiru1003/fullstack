@@ -16,35 +16,33 @@ import AddNewStaffMember from "./components/AddStaff";
 import Staff from "./components/Staff";
 
 const App = () => {
-  useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, setAdmin } = useContext(Context);
 
-    const { isAuthenticated, setIsAuthenticated, setAdmin } = useContext(Context);
-
-    // Fetch the authenticated user data
-    useEffect(() => {
-      const fetchUser = async () => {
-        try {
-          const response = await axios.get(
-            "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
-            {
-              withCredentials: true,  // Send cookies with the request
-            }
-          );
-          setIsAuthenticated(true);  // User is authenticated
-          setAdmin(response.data.user);  // Set admin data
-        } catch (error) {
-          // In case of any errors (like unauthenticated or invalid token)
-          setIsAuthenticated(false);
-          setAdmin({});
-          setError("Failed to fetch user data. Please login again.");
-        }
-      };
-  
-      if (isAuthenticated) {
-        fetchUser();  // Fetch user data only if authenticated
+  // Fetch the authenticated user data
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
+          {
+            withCredentials: true,  // Send cookies with the request
+          }
+        );
+        setIsAuthenticated(true);  // User is authenticated
+        setAdmin(response.data.user);  // Set admin data
+      } catch (error) {
+        setIsAuthenticated(false);
+        setAdmin({});
+        // Set error message if the authentication fails
+        setError("Failed to fetch user data. Please login again.");
+        toast.error("Authentication error. Please login again.");
       }
-    }, [isAuthenticated, setAdmin, setIsAuthenticated]);
+    };
 
+    if (isAuthenticated) {
+      fetchUser();  // Fetch user data only if authenticated
+    }
+  }, [isAuthenticated, setAdmin, setIsAuthenticated]);
   return (
     <Router>
       <Sidebar />

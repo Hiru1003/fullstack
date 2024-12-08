@@ -8,15 +8,16 @@ import { AiFillCloseCircle } from "react-icons/ai";
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
-
+  const [error, setError] = useState("");
+  
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         const { data } = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
-          { withCredentials: true }
+          { withCredentials: true }  // Ensure cookies are sent with the request
         );
-        setAppointments(data.appointments); // Set the fetched appointments
+        setAppointments(data.appointments);  // Set the fetched appointments
       } catch (error) {
         setAppointments([]);
         const errorMessage =
@@ -27,6 +28,8 @@ const Dashboard = () => {
     fetchAppointments();
   }, []); 
 
+
+  
   const handleUpdateStatus = async (appointmentId, status) => {
     try {
       const { data } = await axios.put(

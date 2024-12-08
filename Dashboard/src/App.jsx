@@ -26,6 +26,9 @@ const App = () => {
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
           {
             withCredentials: true,  // Send cookies with the request
+            headers: {
+              Authorization: `Bearer ${yourAuthToken}`  // Add Authorization header
+            }
           }
         );
         setIsAuthenticated(true);  // User is authenticated

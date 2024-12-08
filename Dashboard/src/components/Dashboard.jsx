@@ -15,7 +15,11 @@ const Dashboard = () => {
       try {
         const { data } = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
-          { withCredentials: true }  // Ensure cookies are sent with the request
+          { withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${yourAuthToken}`  // Add Authorization header
+            }
+           }  // Ensure cookies are sent with the request
         );
         setAppointments(data.appointments);  // Set the fetched appointments
       } catch (error) {
@@ -29,7 +33,7 @@ const Dashboard = () => {
   }, []); 
 
 
-  
+
   const handleUpdateStatus = async (appointmentId, status) => {
     try {
       const { data } = await axios.put(

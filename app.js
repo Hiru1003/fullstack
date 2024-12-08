@@ -21,18 +21,24 @@ dbConnection();
 app.use(
   cors({
     origin: [
-      'https://fullstack-7eqclt5f1-hirumis-projects.vercel.app', // Frontend URL 1
-      'https://fullstackadmin-psi.vercel.app', // Dashboard
-      'https://fullstackadmin-dcb23q2d3-hirumis-projects.vercel.app',
+      'https://fullstackadmin-git-master-hirumis-projects.vercel.app', // Correct frontend URL
+      'https://fullstackadmin-git-master-hirumis-projects.vercel.app',
     ],
-    methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-    credentials: true, // Allow credentials (cookies)
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'], // Allow OPTIONS
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers
+    credentials: true, // Allow cookies and credentials
   })
 );
 
-// Handle OPTIONS requests for CORS preflight checks
-app.options('*', cors());
+// Explicitly handle preflight OPTIONS requests
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(204);
+});
+
 
 // Log environment variables for debugging (be cautious with sensitive data in production)
 console.log("PORT:", process.env.PORT);

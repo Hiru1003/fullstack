@@ -25,7 +25,7 @@ const App = () => {
           const response = await axios.get(
             "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
             {
-              withCredentials: true,
+              withCredentials: true, // Ensures cookies are sent
             }
           );
           setIsAuthenticated(true);
@@ -37,6 +37,7 @@ const App = () => {
       };
       fetchUser();
     }, [isAuthenticated]);
+    
     
 
   return (

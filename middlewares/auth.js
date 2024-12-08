@@ -3,53 +3,63 @@ import { catchAsyncErrors } from "./catchAsyncErrors.js";
 import ErrorHandler from "./errorMiddleware.js";
 import jwt from "jsonwebtoken";
 
-// Middleware to authenticate dashboard users
-export const isAdminAuthenticated = catchAsyncErrors(
+// Middleware to authenticate users based on role (admin or patient)
+export const authenticateUser = catchAsyncErrors(
   async (req, res, next) => {
-    const token = req.cookies.adminToken;
+    // Extract token from cookies (either adminToken or patientToken)
+    const token = req.cookies.token;
     if (!token) {
-      return next(
-        new ErrorHandler("Dashboard User is not authenticated!", 400)
-      );
+      return next(new ErrorHandler("User is not authenticated!", 400));
     }
+
+    // Verify and decode the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = await User.findById(decoded.id);
+
+    if (!req.user) {
+      return next(new ErrorHandler("User not found!", 404));
+    }
+
+    next(); // Proceed to the next middleware/route
+  }
+);
+
+// Middleware to authenticate dashboard users (Admin)
+export const isAdminAuthenticated = catchAsyncErrors(
+  async (req, res, next) => {
+    // Verify that the user is an Admin
     if (req.user.role !== "Admin") {
       return next(
         new ErrorHandler(`${req.user.role} not authorized for this resource!`, 403)
       );
     }
-    next();
+    next(); // Admin authenticated, proceed to the next middleware/route
   }
 );
 
-// Middleware to authenticate frontend users
+// Middleware to authenticate frontend users (Patient)
 export const isPatientAuthenticated = catchAsyncErrors(
   async (req, res, next) => {
-    const token = req.cookies.patientToken;
-    if (!token) {
-      return next(new ErrorHandler("User is not authenticated!", 400));
-    }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.user = await User.findById(decoded.id);
+    // Verify that the user is a Patient
     if (req.user.role !== "Patient") {
       return next(
         new ErrorHandler(`${req.user.role} not authorized for this resource!`, 403)
       );
     }
-    next();
+    next(); // Patient authenticated, proceed to the next middleware/route
   }
 );
 
+// Middleware to authorize based on multiple roles
 export const isAuthorized = (...roles) => {
   return (req, res, next) => {
+    // Check if user's role matches any of the allowed roles
     if (!roles.includes(req.user.role)) {
       return next(
-        new ErrorHandler(
-          `${req.user.role} not allowed to access this resource!`
-        )
+        new ErrorHandler(`${req.user.role} not allowed to access this resource!`, 403)
       );
     }
-    next();
+    next(); // User is authorized, proceed to the next middleware/route
   };
 };
+

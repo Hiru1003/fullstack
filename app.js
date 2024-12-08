@@ -20,15 +20,12 @@ dbConnection();
 // Set up CORS
 app.use(
   cors({
-    origin: [
-      "https://fullstack-git-master-hirumis-projects.vercel.app", // Frontend URL
-    ],
+    origin: ["https://fullstack-d7jxox7t9-hirumis-projects.vercel.app"],
     methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
-    credentials: true, // Allow cookies
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
-
-
 
 console.log("PORT:", process.env.PORT);
 console.log("MONGO_URI:", process.env.MONGO_URI);

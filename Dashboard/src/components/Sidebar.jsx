@@ -18,20 +18,31 @@ const Sidebar = () => {
   const [show, setShow] = useState(false);
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-
   const handleLogout = async () => {
-    await axios
-      .get("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/logout", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setIsAuthenticated(false);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    try {
+      // Sending logout request to the backend
+      const response = await axios.get(
+        "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/logout",
+        { withCredentials: true }  // Ensure cookies are sent with the request
+      );
+      
+      // Show success toast message
+      toast.success(response.data.message);
+  
+      // Update authentication state to false
+      setIsAuthenticated(false);
+  
+      // Optionally, redirect to login page after logout
+      navigateTo("/login");
+  
+      // Clear any other data if needed (like user info)
+    } catch (error) {
+      // Handle error
+      const errorMessage = error.response?.data?.message || "Logout failed";
+      toast.error(errorMessage);
+    }
   };
+  
 
   const navigateTo = useNavigate();
 

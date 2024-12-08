@@ -21,10 +21,12 @@ dbConnection();
 app.use(
   cors({
     origin: (origin, callback) => {
-      console.log("Request Origin: ", origin); // Debugging the origin
-      if (
-        [process.env.FRONTEND_URL, process.env.DASHBOARD_URL].includes(origin)
-      ) {
+      console.log("Request Origin:", origin); // Log incoming request origins
+      const allowedOrigins = [
+        process.env.FRONTEND_URL,
+        process.env.DASHBOARD_URL,
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -34,6 +36,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 
 console.log("PORT:", process.env.PORT);

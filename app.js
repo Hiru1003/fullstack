@@ -20,20 +20,11 @@ dbConnection();
 // Set up CORS
 app.use(
   cors({
-    origin: (origin, callback) => {
-      console.log("Request Origin:", origin); // Log incoming request origins
-      const allowedOrigins = [
-        process.env.FRONTEND_URL,
-        process.env.DASHBOARD_URL,
-      ];
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "DELETE", "PUT"],
-    credentials: true,
+    origin: [
+      "https://fullstack-git-master-hirumis-projects.vercel.app", // Frontend URL
+    ],
+    methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
+    credentials: true, // Allow cookies
   })
 );
 

@@ -16,36 +16,38 @@ import AddNewStaffMember from "./components/AddStaff";
 import Staff from "./components/Staff";
 
 const App = () => {
-  const { isAuthenticated, setIsAuthenticated, setAdmin } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
 
-  // Fetch the authenticated user data
+  // State for error handling
+  const [error, setError] = useState(null);
+  
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchAdmin = async () => {
       try {
+        // API call to fetch admin details
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
           {
-            withCredentials: true,  // Send cookies with the request
-            headers: {
-              Authorization: `Bearer ${yourAuthToken}`  // Add Authorization header
-            }
+            withCredentials: true, // Include cookies for authentication
           }
         );
-        setIsAuthenticated(true);  // User is authenticated
-        setAdmin(response.data.user);  // Set admin data
+        setIsAuthenticated(true);
+        setUser(response.data.user); // Store the admin user data
       } catch (error) {
         setIsAuthenticated(false);
-        setAdmin({});
-        // Set error message if the authentication fails
-        setError("Failed to fetch user data. Please login again.");
-        toast.error("Authentication error. Please login again.");
+        setUser({});
+        setError("Failed to fetch admin data. Please login again.");
       }
     };
-
+  
+    // Fetch admin data if authenticated
     if (isAuthenticated) {
-      fetchUser();  // Fetch user data only if authenticated
+      fetchAdmin();
     }
-  }, [isAuthenticated, setAdmin, setIsAuthenticated]);
+  }, [isAuthenticated, setIsAuthenticated, setUser]);
+  
+
+
   return (
     <Router>
       <Sidebar />

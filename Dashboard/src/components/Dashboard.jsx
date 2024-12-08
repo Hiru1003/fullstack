@@ -7,31 +7,34 @@ import { GoCheckCircleFill } from "react-icons/go";
 import { AiFillCloseCircle } from "react-icons/ai";
 
 const Dashboard = () => {
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+
+  // State for error handling
   const [appointments, setAppointments] = useState([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const { data } = await axios.get(
+        // API call to fetch all appointments
+        const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
-          { withCredentials: true,
-            headers: {
-              Authorization: `Bearer ${yourAuthToken}`  // Add Authorization header
-            }
-           }  // Ensure cookies are sent with the request
+          {
+            withCredentials: true, // Include cookies for authentication
+          }
         );
-        setAppointments(data.appointments);  // Set the fetched appointments
+        setAppointments(response.data.appointments); // Store the appointments data
       } catch (error) {
-        setAppointments([]);
-        const errorMessage =
-          error.response?.data?.message || "Failed to fetch appointments";
-        toast.error(errorMessage);
+        setError("Failed to fetch appointments. Please try again later.");
       }
     };
-    fetchAppointments();
-  }, []); 
-
+  
+    // Fetch appointments if authenticated
+    if (isAuthenticated) {
+      fetchAppointments();
+    }
+  }, [isAuthenticated]);
+  
 
 
   const handleUpdateStatus = async (appointmentId, status) => {

@@ -23,12 +23,15 @@ const App = () => {
   
   useEffect(() => {
     const fetchAdmin = async () => {
+      const token = localStorage.getItem("access_token");  // Get the token from localStorage
       try {
-        // API call to fetch admin details
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
           {
-            withCredentials: true, // Include cookies for authentication
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,  // Use the token in the Authorization header
+            }
           }
         );
         setIsAuthenticated(true);

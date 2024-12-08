@@ -15,40 +15,29 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
     try {
-      const response = await axios.post(
-        "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
-        { email, password, role: "Admin" },
-        {
-          withCredentials: true, 
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
-      // On successful login, show a success message
-      toast.success(response.data.message);
-  
-      // Save the authentication token in localStorage
-      localStorage.setItem("access_token", response.data.token);
-  
-      // Set the authentication state and redirect
-      setIsAuthenticated(true);
-      setTimeout(() => {
-        navigateTo("/dashboard");  // Redirect to the dashboard
-      }, 1000);
-  
-      // Clear form fields after successful login
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
+      await axios
+        .post(
+          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
+          { email, password, confirmPassword, role: "Patient" },
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+        .then((res) => {
+          toast.success(res.data.message);
+          setIsAuthenticated(true);
+          navigateTo("/");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+        });
     } catch (error) {
-      const errorMessage = error.response?.data?.message || "Login failed due to server error";
-      toast.error(errorMessage);
+      toast.error(error.response?.data?.message || "Login failed.");
     }
   };
+  
   
   
   

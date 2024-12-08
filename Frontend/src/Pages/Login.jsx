@@ -34,9 +34,10 @@ const Login = () => {
           setConfirmPassword("");
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Login failed.");
     }
   };
+  
 
   if (isAuthenticated) {
     return <Navigate to={"/"} />;

@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       'https://fullstack-mjgyajd12-hirumis-projects.vercel.app',  // Frontend URL
-      'https://fullstackadmin-psi.vercel.app',  // Dashboard URL
+      'https://fullstackadmin-flwxgcw2j-hirumis-projects.vercel.app',  // Dashboard URL
     ], 
     methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers in the request

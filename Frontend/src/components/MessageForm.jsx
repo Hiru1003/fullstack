@@ -83,7 +83,7 @@ const MessageForm = () => {
             <button type="submit">Send</button>
           </div>
         </form>
-        <img src="/Vector.png" alt="vector" />
+        {/* <img src="/Vector.png" alt="vector" /> */}
       </div>
     </>
   );

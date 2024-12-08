@@ -19,24 +19,39 @@ const App = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } =
     useContext(Context);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(
-          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me",
-          {
-            withCredentials: true,
-          }
-        );
-        setIsAuthenticated(true);
-        setUser(response.data.user);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setUser({});
-      }
-    };
-    fetchUser();
-  }, [isAuthenticated]);
+// Retrieve token from localStorage
+const token = localStorage.getItem("token");
+
+if (token) {
+  // If token exists, make the API request with the Authorization header
+  axios.get("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,  // Send the token in the Authorization header
+    },
+  })
+  .then(response => {
+    // Handle successful response
+    console.log("User info:", response.data);
+  })
+  .catch(error => {
+    // Check if error response is available
+    if (error.response) {
+      // Server responded with a status other than 2xx
+      console.error("Error fetching user info: ", error.response.data);
+      console.error("Status Code: ", error.response.status);
+    } else if (error.request) {
+      // Request was made but no response was received
+      console.error("No response received from server.");
+    } else {
+      // Something went wrong in setting up the request
+      console.error("Error in setting up request:", error.message);
+    }
+  });
+} else {
+  // Token not found in localStorage
+  console.error("No token found. User is not authenticated.");
+}
+
 
   return (
     <>

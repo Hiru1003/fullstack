@@ -17,9 +17,9 @@ const Hero = ({ title, imageUrl }) => {
         </div>
         <div className="banner">
           <img src={"/docillus.webp"} alt="hero" />
-          <span>
+          {/* <span>
             <img src="/Vector.png" alt="vector" />
-          </span>
+          </span> */}
         </div>
       </div>
     </>

@@ -19,7 +19,7 @@ const Appointment = () => {
         <div className="banner">
           <img src={"/docillus5.webp"} alt="hero"  />
           <span>
-            <img src="/Vector.png" alt="vector" />
+            {/* <img src="/Vector.png" alt="vector" /> */}
           </span>
         </div>
       </div>

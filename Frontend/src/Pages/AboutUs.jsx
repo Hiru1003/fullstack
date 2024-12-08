@@ -19,7 +19,7 @@ const AboutUs = () => {
         <div className="banner">
           <img src={"/docillus3.webp"} alt="hero" />
           <span>
-            <img src="/Vector.png" alt="vector" />
+            {/* <img src="/Vector.png" alt="vector" /> */}
           </span>
         </div>
       </div>

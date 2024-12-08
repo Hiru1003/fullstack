@@ -14,62 +14,62 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Use the latest version
         with:
-          path: frontend
+          path: frontend  # Ensure the path is relative to your frontend folder
 
       - name: Set up Node.js for Frontend
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'  # Make sure you use the correct Node.js version
+          node-version: '18'  # Use the Node.js version compatible with Vercel
 
       - name: Install dependencies for Frontend
-        run: |
-          cd frontend
-          npm install
+        working-directory: ./frontend
+        run: npm install
 
       - name: Run tests for Frontend
-        run: |
-          cd frontend
-          npm test  # Ensure you have tests in your frontend app
+        working-directory: ./frontend
+        run: npm test  # Ensure your frontend has test scripts
 
       - name: Build Frontend
-        run: |
-          cd frontend
-          npm run build  # Build the production version of the frontend
+        working-directory: ./frontend
+        run: npm run build  # Build the production version of the frontend
 
       - name: Deploy Frontend to Vercel
-        run: |
-          cd frontend
-          vercel --prod --token ${{ secrets.VERCEL_TOKEN }}  # Deploy using your Vercel token
-          
+        working-directory: ./frontend
+        run: npx vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }}  # Use Vercel CLI for deployment
+
   backend:
     runs-on: ubuntu-latest  # Run the job on the latest Ubuntu environment
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Use the latest version
         with:
-          path: backend
+          path: backend  # Ensure the path is relative to your backend folder
 
       - name: Set up Node.js for Backend
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'  # Ensure you use the correct Node.js version
+          node-version: '18'  # Use a Node.js version compatible with your backend
 
       - name: Install dependencies for Backend
-        run: |
-          cd backend
-          npm install
+        working-directory: ./backend
+        run: npm install
 
       - name: Run tests for Backend
-        run: |
-          cd backend
-          npm test  # Ensure you have tests in your backend app
+        working-directory: ./backend
+        run: npm test  # Ensure your backend has test scripts
 
       - name: Deploy Backend to Heroku
+        working-directory: ./backend
         run: |
+          echo "Deploying to Heroku..."
+          git init
           git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
-          git push heroku main  # Push to Heroku for deployment
+          git add .
+          git commit -m "Heroku Deployment"
+          git push heroku HEAD:main --force
         env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # Your Heroku API key
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}

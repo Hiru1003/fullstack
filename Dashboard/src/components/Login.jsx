@@ -20,6 +20,7 @@ const Login = () => {
       // Sending login request to backend with CORS configuration
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
+        
         { email, password, role: "Admin" },
         {
           withCredentials: true,  // This ensures cookies are sent with the request

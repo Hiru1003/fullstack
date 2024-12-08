@@ -22,11 +22,11 @@ app.use(
   cors({
     origin: [
       'https://fullstack-mjgyajd12-hirumis-projects.vercel.app',  // Frontend URL
-      'https://fullstackadmin-flwxgcw2j-hirumis-projects.vercel.app', 
-    ], 
-    methods: ['GET', 'POST', 'DELETE', 'PUT'], 
-    credentials: true, // Allow credentials (cookies)
-    allowedHeaders: ['Content-Type', 'Authorization'], 
+      'https://fullstackadmin-flwxgcw2j-hirumis-projects.vercel.app',
+    ],
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    credentials: true,  // Allow credentials (cookies)
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 

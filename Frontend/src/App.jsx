@@ -51,7 +51,6 @@ const App = () => {
     }
   }, [isAuthenticated, setIsAuthenticated, setUser]);
   
-  
 
   return (
     <>

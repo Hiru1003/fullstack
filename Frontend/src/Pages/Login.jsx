@@ -25,7 +25,7 @@ const Login = () => {
         }
       );
       
-      // Check if the response is valid before accessing it
+      // Ensure the response is valid before accessing it
       if (res && res.data) {
         toast.success(res.data.message);
         setIsAuthenticated(true);

@@ -16,35 +16,27 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(
-        "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
-        { email, password, confirmPassword, role: "Patient" },
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      
-      // Ensure the response is valid before accessing it
-      if (res && res.data) {
-        toast.success(res.data.message);
-        setIsAuthenticated(true);
-        navigateTo("/");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-      }
+      await axios
+        .post(
+          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
+          { email, password, confirmPassword, role: "Patient" },
+          {
+            withCredentials: true,
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+        .then((res) => {
+          toast.success(res.data.message);
+          setIsAuthenticated(true);
+          navigateTo("/");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+        });
     } catch (error) {
-      // Improved error handling
-      if (error.response) {
-        toast.error(error.response.data.message || "Login failed.");
-      } else {
-        toast.error("An error occurred while logging in.");
-      }
+      toast.error(error.response.data.message);
     }
   };
-  
-  
 
   if (isAuthenticated) {
     return <Navigate to={"/"} />;

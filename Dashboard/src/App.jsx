@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
@@ -16,37 +16,27 @@ import AddNewStaffMember from "./components/AddStaff";
 import Staff from "./components/Staff";
 
 const App = () => {
-  const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, admin, setAdmin } =
+    useContext(Context);
 
-  // State for error handling
-  const [error, setError] = useState(null);
-  
   useEffect(() => {
-    const fetchAdmin = async () => {
+    const fetchUser = async () => {
       try {
-        // API call to fetch admin details
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
           {
-            withCredentials: true, // Include cookies for authentication
+            withCredentials: true,
           }
         );
         setIsAuthenticated(true);
-        setUser(response.data.user); // Store the admin user data
+        setAdmin(response.data.user);
       } catch (error) {
         setIsAuthenticated(false);
-        setUser({});
-        setError("Failed to fetch admin data. Please login again.");
+        setAdmin({});
       }
     };
-  
-    // Fetch admin data if authenticated
-    if (isAuthenticated) {
-      fetchAdmin();
-    }
-  }, [isAuthenticated, setIsAuthenticated, setUser]);
-  
-
+    fetchUser();
+  }, [isAuthenticated]);
 
   return (
     <Router>

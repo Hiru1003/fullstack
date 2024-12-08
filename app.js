@@ -20,11 +20,21 @@ dbConnection();
 // Set up CORS
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL, process.env.DASHBOARD_URL],
+    origin: (origin, callback) => {
+      console.log("Request Origin: ", origin); // Debugging the origin
+      if (
+        [process.env.FRONTEND_URL, process.env.DASHBOARD_URL].includes(origin)
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
 );
+
 
 console.log("PORT:", process.env.PORT);
 console.log("MONGO_URI:", process.env.MONGO_URI);

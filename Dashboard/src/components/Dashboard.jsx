@@ -13,15 +13,17 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
+        const authToken = localStorage.getItem('authToken'); // Adjust based on how tokens are stored
         const { data } = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
-          { withCredentials: true,
+          {
+            withCredentials: true,
             headers: {
-              Authorization: `Bearer ${yourAuthToken}`  // Add Authorization header
-            }
-           }  // Ensure cookies are sent with the request
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
         );
-        setAppointments(data.appointments);  // Set the fetched appointments
+        setAppointments(data.appointments);
       } catch (error) {
         setAppointments([]);
         const errorMessage =
@@ -30,8 +32,8 @@ const Dashboard = () => {
       }
     };
     fetchAppointments();
-  }, []); 
-
+  }, []);
+  
 
 
   const handleUpdateStatus = async (appointmentId, status) => {

@@ -15,40 +15,42 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // Sending login request to backend with CORS configuration
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
         { email, password, role: "Admin" },
         {
-          withCredentials: true,  // This ensures cookies are sent with the request
+          withCredentials: true, 
           headers: {
-            "Content-Type": "application/json",  // Ensuring the right content type
+            "Content-Type": "application/json",
           },
         }
       );
-
+  
       // On successful login, show a success message
       toast.success(response.data.message);
-
-      // Update the authentication state
-      setIsAuthenticated(true);  // Set the user as authenticated
-
-      // Redirect to the home page after login
-      navigateTo("/");
-
+  
+      // Save the authentication token in localStorage
+      localStorage.setItem("access_token", response.data.token);
+  
+      // Set the authentication state and redirect
+      setIsAuthenticated(true);
+      setTimeout(() => {
+        navigateTo("/dashboard");  // Redirect to the dashboard
+      }, 1000);
+  
       // Clear form fields after successful login
       setEmail("");
       setPassword("");
       setConfirmPassword("");
     } catch (error) {
-      // Handle login failure or CORS issues
-      const errorMessage =
-        error.response?.data?.message || "Login failed due to server error";
+      const errorMessage = error.response?.data?.message || "Login failed due to server error";
       toast.error(errorMessage);
     }
   };
+  
+  
   
 
   if (isAuthenticated) {

@@ -36,6 +36,7 @@ const App = () => {
           // In case of any errors (like unauthenticated or invalid token)
           setIsAuthenticated(false);
           setAdmin({});
+          setError("Failed to fetch user data. Please login again.");
         }
       };
   

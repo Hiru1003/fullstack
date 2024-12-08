@@ -27,16 +27,17 @@ const Login = () => {
         )
         .then((res) => {
           toast.success(res.data.message);
-          setIsAuthenticated(true);
-          navigateTo("/");
-          setEmail("");
+          setIsAuthenticated(true);  // Update the authentication state
+          navigateTo("/");  // Redirect to the homepage (or another page after login)
+          setEmail("");  // Clear the input fields
           setPassword("");
           setConfirmPassword("");
         });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
+  
 
   if (isAuthenticated) {
     return <Navigate to={"/"} />;

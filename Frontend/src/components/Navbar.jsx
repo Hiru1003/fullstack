@@ -10,17 +10,17 @@ const Navbar = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
   const handleLogout = async () => {
-    await axios
-      .get("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/logout", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setIsAuthenticated(false);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    try {
+      const res = await axios.get(
+        "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/logout", 
+        { withCredentials: true }
+      );
+      toast.success(res.data.message);
+      setIsAuthenticated(false);  // Set to false when logging out
+      navigateTo("/");  // Redirect to home or desired page after logout
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Logout failed");
+    }
   };
 
   const navigateTo = useNavigate();

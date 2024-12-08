@@ -16,25 +16,35 @@ import { Context } from "./main";
 
 const App = () => {
 
-  const token = localStorage.getItem("token");  // Retrieve token from storage
+  const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
 
-  if (token) {
-    console.log("Token:", token); // Check token before sending request
-  
-    axios.get("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,  // Ensure correct Authorization header format
-      },
-    })
-    .then(response => {
-      console.log("User info:", response.data);
-    })
-    .catch(error => {
-      console.error("Error fetching user info:", error);
-    });
-  } else {
-    console.error("No token found. Please log in.");
-  }
+  // State for error handling
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // API call to fetch user details
+        const response = await axios.get(
+          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me",
+          {
+            withCredentials: true, // Include cookies for authentication
+          }
+        );
+        setIsAuthenticated(true);
+        setUser(response.data.user);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setUser({});
+        setError("Failed to fetch user data. Please login again.");
+      }
+    };
+
+    // Fetch user data if authenticated
+    if (isAuthenticated) {
+      fetchUser();
+    }
+  }, [isAuthenticated, setIsAuthenticated, setUser]);
   
 
   return (

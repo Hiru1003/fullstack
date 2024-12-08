@@ -20,17 +20,15 @@ dbConnection();
 // Set up CORS
 app.use(
   cors({
-    origin: [
-      'https://fullstack-j53ankrzp-hirumis-projects.vercel.app',  // Frontend URL
-      'https://fullstackadmin-psi.vercel.app/login',  // Dashboard URL
-    ], 
+    origin: 'https://fullstack-7eqclt5f1-hirumis-projects.vercel.app',  // Frontend URL
     methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Added 'X-Requested-With' for preflight
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
     credentials: true, // Allow credentials (cookies)
-    preflightContinue: true, // Handle preflight requests properly
-    optionsSuccessStatus: 200, // For legacy browsers that may not handle 204 response
   })
 );
+
+// Handle OPTIONS requests for CORS preflight checks
+app.options('*', cors());
 
 
 console.log("PORT:", process.env.PORT);

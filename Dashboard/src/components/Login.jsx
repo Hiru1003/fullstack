@@ -15,7 +15,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     try {
       // Sending login request to backend with CORS configuration
       const response = await axios.post(
@@ -28,27 +28,27 @@ const Login = () => {
           },
         }
       );
-      
+
       // On successful login, show a success message
       toast.success(response.data.message);
-  
+
       // Update the authentication state
       setIsAuthenticated(true);  // Set the user as authenticated
-  
+
       // Redirect to the home page after login
       navigateTo("/");
-  
+
       // Clear form fields after successful login
       setEmail("");
       setPassword("");
       setConfirmPassword("");
     } catch (error) {
       // Handle login failure or CORS issues
-      const errorMessage = error.response?.data?.message || "Login failed due to server error";
+      const errorMessage =
+        error.response?.data?.message || "Login failed due to server error";
       toast.error(errorMessage);
     }
   };
-  
   
 
   if (isAuthenticated) {

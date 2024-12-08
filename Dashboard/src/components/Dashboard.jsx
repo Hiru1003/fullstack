@@ -16,13 +16,16 @@ const Dashboard = () => {
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           { withCredentials: true }
         );
-        setAppointments(data.appointments);
+        setAppointments(data.appointments); // Set the fetched appointments
       } catch (error) {
         setAppointments([]);
+        const errorMessage =
+          error.response?.data?.message || "Failed to fetch appointments";
+        toast.error(errorMessage);
       }
     };
     fetchAppointments();
-  }, []);
+  }, []); 
 
   const handleUpdateStatus = async (appointmentId, status) => {
     try {

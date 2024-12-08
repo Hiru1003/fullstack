@@ -16,27 +16,33 @@ import AddNewStaffMember from "./components/AddStaff";
 import Staff from "./components/Staff";
 
 const App = () => {
-  const { isAuthenticated, setIsAuthenticated, admin, setAdmin } =
-    useContext(Context);
+  useContext(Context);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(
-          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
-          {
-            withCredentials: true,
-          }
-        );
-        setIsAuthenticated(true);
-        setAdmin(response.data.user);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setAdmin({});
+    const { isAuthenticated, setIsAuthenticated, setAdmin } = useContext(Context);
+
+    // Fetch the authenticated user data
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(
+            "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
+            {
+              withCredentials: true,  // Send cookies with the request
+            }
+          );
+          setIsAuthenticated(true);  // User is authenticated
+          setAdmin(response.data.user);  // Set admin data
+        } catch (error) {
+          // In case of any errors (like unauthenticated or invalid token)
+          setIsAuthenticated(false);
+          setAdmin({});
+        }
+      };
+  
+      if (isAuthenticated) {
+        fetchUser();  // Fetch user data only if authenticated
       }
-    };
-    fetchUser();
-  }, [isAuthenticated]);
+    }, [isAuthenticated, setAdmin, setIsAuthenticated]);
 
   return (
     <Router>

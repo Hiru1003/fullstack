@@ -20,7 +20,10 @@ dbConnection();
 // Set up CORS
 app.use(
   cors({
-    origin: 'https://fullstack-7eqclt5f1-hirumis-projects.vercel.app',  // Frontend URL
+    origin: [
+      'https://fullstack-7eqclt5f1-hirumis-projects.vercel.app', // Frontend URL 1
+      'https://fullstackadmin-psi.vercel.app', // Frontend URL 2
+    ],
     methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
     credentials: true, // Allow credentials (cookies)
@@ -30,33 +33,32 @@ app.use(
 // Handle OPTIONS requests for CORS preflight checks
 app.options('*', cors());
 
-
+// Log environment variables for debugging (be cautious with sensitive data in production)
 console.log("PORT:", process.env.PORT);
 console.log("MONGO_URI:", process.env.MONGO_URI);
 
-
 // Middleware setup
-app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser()); // Parse cookies attached to requests
+app.use(express.json()); // Parse incoming JSON payloads
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: "/tmp/",
+    tempFileDir: "/tmp/", // Directory for temporary file storage
   })
 );
 
 // Routes
-app.use("/api/v1/message", messageRouter);
-app.use("/api/v1/user", userRouter);
-app.use("/api/v1/appointment", appointmentRouter);
+app.use("/api/v1/message", messageRouter); // Message routes
+app.use("/api/v1/user", userRouter); // User routes
+app.use("/api/v1/appointment", appointmentRouter); // Appointment routes
 
 // A simple root route for testing the backend
 app.get("/", (req, res) => {
   res.send("Welcome to the backend API!");
 });
 
-// Error handling middleware should be at the end
+// Error handling middleware should be at the end of the middleware stack
 app.use(errorMiddleware);
 
 export default app;

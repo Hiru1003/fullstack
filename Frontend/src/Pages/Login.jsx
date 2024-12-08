@@ -21,16 +21,16 @@ const Login = () => {
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
         { email, password, confirmPassword, role: "Patient" },
         {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
+          withCredentials: true,  // Ensure cookies are sent with the request
+          headers: { "Content-Type": "application/json" },  // Set content type to JSON
         }
       );
   
       if (res && res.data) {
         toast.success(res.data.message);
-        setIsAuthenticated(true);
-        navigateTo("/");
-        setEmail("");
+        setIsAuthenticated(true);  // Update authentication state
+        navigateTo("/");  // Redirect to the home page
+        setEmail("");  // Clear the form fields
         setPassword("");
         setConfirmPassword("");
       } else {
@@ -44,6 +44,7 @@ const Login = () => {
       }
     }
   };
+  
   
 
   

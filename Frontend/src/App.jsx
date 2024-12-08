@@ -19,38 +19,28 @@ const App = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } =
     useContext(Context);
 
-// Retrieve token from localStorage
-const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-if (token) {
-  // If token exists, make the API request with the Authorization header
-  axios.get("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me", {
-    headers: {
-      Authorization: `Bearer ${token}`,  // Send the token in the Authorization header
-    },
-  })
-  .then(response => {
-    // Handle successful response
-    console.log("User info:", response.data);
-  })
-  .catch(error => {
-    // Check if error response is available
-    if (error.response) {
-      // Server responded with a status other than 2xx
-      console.error("Error fetching user info: ", error.response.data);
-      console.error("Status Code: ", error.response.status);
-    } else if (error.request) {
-      // Request was made but no response was received
-      console.error("No response received from server.");
+    if (token) {
+      // Log token to ensure it's correct
+      console.log("Token:", token);
+    
+      // Make GET request to fetch user info
+      axios.get("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,  // Ensure Authorization header is correctly set
+        },
+      })
+      .then(response => {
+        console.log("User info:", response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching user info:", error);
+      });
     } else {
-      // Something went wrong in setting up the request
-      console.error("Error in setting up request:", error.message);
+      console.error("No token found. Please log in.");
     }
-  });
-} else {
-  // Token not found in localStorage
-  console.error("No token found. User is not authenticated.");
-}
+    
 
 
   return (

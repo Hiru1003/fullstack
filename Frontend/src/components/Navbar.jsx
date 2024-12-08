@@ -16,8 +16,8 @@ const Navbar = () => {
         { withCredentials: true }
       );
       toast.success(res.data.message);
-      setIsAuthenticated(false);  // Set to false when logging out
-      navigateTo("/");  // Redirect to home or desired page after logout
+      setIsAuthenticated(false); 
+      navigateTo("/");  
     } catch (err) {
       toast.error(err.response?.data?.message || "Logout failed");
     }

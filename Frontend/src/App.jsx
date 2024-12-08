@@ -24,7 +24,6 @@ const App = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // API call to fetch user details
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me",
           {
@@ -36,15 +35,22 @@ const App = () => {
       } catch (error) {
         setIsAuthenticated(false);
         setUser({});
-        setError("Failed to fetch user data. Please login again.");
+        if (error.response) {
+          setError("Failed to fetch user data. Please login again.");
+          toast.error(error.response.data.message || "Failed to fetch user data.");
+        } else {
+          setError("Network error. Please try again later.");
+          toast.error("Network error. Please try again later.");
+        }
       }
     };
-
+  
     // Fetch user data if authenticated
     if (isAuthenticated) {
       fetchUser();
     }
   }, [isAuthenticated, setIsAuthenticated, setUser]);
+  
   
 
   return (

@@ -19,29 +19,28 @@ const App = () => {
   const { isAuthenticated, setIsAuthenticated, setUser } =
     useContext(Context);
 
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      // Log token to ensure it's correct
-      console.log("Token:", token);
-    
-      // Make GET request to fetch user info
-      axios.get("https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,  // Ensure Authorization header is correctly set
-        },
-      })
-      .then(response => {
-        console.log("User info:", response.data);
-      })
-      .catch(error => {
-        console.error("Error fetching user info:", error);
-      });
-    } else {
-      console.error("No token found. Please log in.");
-    }
-    
-
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4000/api/v1/user/patient/me",
+          
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,  // Correct way to send token in Authorization header
+            },
+            withCredentials: true,
+          }
+        );
+        setIsAuthenticated(true);
+        setUser(response.data.user);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setUser({});
+      }
+    };
+    fetchUser();
+  }, [isAuthenticated]);
 
   return (
     <>

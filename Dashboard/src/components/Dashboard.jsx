@@ -13,26 +13,36 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const authToken = localStorage.getItem('authToken'); // Use secure storage for tokens
+        const authToken = localStorage.getItem("authToken");
+        console.log("Auth Token:", authToken);
+  
+        if (!authToken) {
+          throw new Error("Authentication token not found");
+        }
+  
         const { data } = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
             withCredentials: true,
             headers: {
-              Authorization: `Bearer ${authToken}`, // Ensure proper auth header
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
         setAppointments(data.appointments);
       } catch (error) {
+        console.error("Error fetching appointments:", error.response || error);
         setAppointments([]);
         const errorMessage =
           error.response?.data?.message || "Failed to fetch appointments";
         toast.error(errorMessage);
+        setError(errorMessage);
       }
     };
+  
     fetchAppointments();
   }, []);
+  
   
   
 

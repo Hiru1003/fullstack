@@ -10,32 +10,37 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-
   const navigateTo = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
+    // Validate inputs
     if (!email || !password || !confirmPassword) {
       toast.error("Please fill in all fields!");
       return;
     }
-  
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-  
+
     try {
+      console.log("Sending Request Data:", { email, password, role: "Admin" });
+
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
-        { email, password, role: "Admin" },
+        { email, password, role: "Admin" }, // Request body
         {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       );
+
+      console.log("Response Data:", response.data);
       toast.success(response.data.message);
+
       setIsAuthenticated(true);
       navigateTo("/");
     } catch (error) {

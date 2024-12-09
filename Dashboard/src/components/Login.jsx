@@ -10,46 +10,44 @@ const Login = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+
   const navigateTo = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Validate inputs
-    if (!email || !password || !confirmPassword) {
-      toast.error("Please fill in all fields!");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match!");
-      return;
-    }
-
+    
     try {
-      console.log("Sending Request Data:", { email, password, role: "Admin" });
-
+      // Sending login request to backend with CORS configuration
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
-        { email, password, role: "Admin" }, // Request body
+        { email, password, role: "Admin" },
         {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
+          withCredentials: true,  // This ensures cookies are sent with the request
+          headers: {
+            "Content-Type": "application/json",  // Ensuring the right content type
+          },
         }
       );
-
-      console.log("Response Data:", response.data);
+      
+      // On successful login, show a success message
       toast.success(response.data.message);
-
-      setIsAuthenticated(true);
+  
+      // Update the authentication state
+      setIsAuthenticated(true);  // Set the user as authenticated
+  
+      // Redirect to the home page after login
       navigateTo("/");
+  
+      // Clear form fields after successful login
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
     } catch (error) {
-      console.error("Error Response:", error.response);
-      const errorMessage = error.response?.data?.message || "Login failed";
+      // Handle login failure or CORS issues
+      const errorMessage = error.response?.data?.message || "Login failed due to server error";
       toast.error(errorMessage);
     }
   };
-  
   
   
 

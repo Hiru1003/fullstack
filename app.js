@@ -25,22 +25,20 @@ app.use(
       'https://fullstackadmin-psi.vercel.app', // Dashboard
       'https://fullstackadmin-dcb23q2d3-hirumis-projects.vercel.app', // Add this origin
     ],
-    methods: ['GET', 'POST', 'DELETE', 'PUT'], // Allowed HTTP methods
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS for preflight
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
     credentials: true, // Allow credentials (cookies)
   })
 );
 
-
 // Explicitly handle preflight OPTIONS requests
 app.options('*', (req, res) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.sendStatus(204);
 });
-
 
 // Log environment variables for debugging (be cautious with sensitive data in production)
 console.log("PORT:", process.env.PORT);

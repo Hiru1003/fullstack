@@ -20,16 +20,25 @@ dbConnection();
 // Set up CORS
 app.use(
   cors({
-    origin: [
-      'https://fullstack-7eqclt5f1-hirumis-projects.vercel.app', // Frontend URL 1
-      'https://fullstackadmin-psi.vercel.app', // Dashboard
-      'https://fullstackadmin-dcb23q2d3-hirumis-projects.vercel.app', // Add this origin
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS for preflight
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-    credentials: true, // Allow credentials (cookies)
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'https://fullstackadmin-70r13u6r1-hirumis-projects.vercel.app',
+        'https://fullstack-j53ankrzp-hirumis-projects.vercel.app',
+        'https://fullstackadmin-dcb23q2d3-hirumis-projects.vercel.app',
+        'https://fullstackadmin-psi.vercel.app'
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   })
 );
+
 
 // Explicitly handle preflight OPTIONS requests
 app.options('*', (req, res) => {

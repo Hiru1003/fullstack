@@ -25,7 +25,8 @@ app.use(
         'https://fullstackadmin-70r13u6r1-hirumis-projects.vercel.app',
         'https://fullstack-j53ankrzp-hirumis-projects.vercel.app',
         'https://fullstackadmin-dcb23q2d3-hirumis-projects.vercel.app',
-        'https://fullstackadmin-psi.vercel.app'
+        'https://fullstackadmin-psi.vercel.app',
+        'https://fullstackadmin-469das4on-hirumis-projects.vercel.app'
       ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);

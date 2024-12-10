@@ -16,32 +16,52 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
   
+    // Debugging: Log inputs
+    console.log("Email:", email);
+    console.log("Password:", password);
+    console.log("Confirm Password:", confirmPassword);
+  
+    // Validate inputs
+    if (!email || !password || !confirmPassword) {
+      toast.error("Please fill in all fields!");
+      return;
+    }
+  
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+  
     try {
-      const res = await axios.post(
+      // Payload with confirmPassword and role
+      const payload = {
+        email,
+        password,
+        confirmPassword,
+        role: "Patient", // Adjust role as needed, e.g., "Admin", "Doctor", etc.
+      };
+  
+      console.log("Sending Payload:", payload); // Debugging: Log payload before sending
+  
+      // API call
+      const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
-        { email, password, confirmPassword, role: "Patient" },
+        payload,
         {
-          withCredentials: true,  // Ensure cookies are sent with the request
-          headers: { "Content-Type": "application/json" },  // Set content type to JSON
+          withCredentials: true, // Ensures cookies are sent
+          headers: { "Content-Type": "application/json" },
         }
       );
   
-      if (res && res.data) {
-        toast.success(res.data.message);
-        setIsAuthenticated(true);  // Update authentication state
-        navigateTo("/");  // Redirect to the home page
-        setEmail("");  // Clear the form fields
-        setPassword("");
-        setConfirmPassword("");
-      } else {
-        toast.error("Unexpected response data");
-      }
+      // Handle successful login
+      toast.success(response.data.message);
+      setIsAuthenticated(true);
+      navigateTo("/"); // Redirect to the dashboard or appropriate page
     } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data.message || "Login failed.");
-      } else {
-        toast.error("An error occurred while logging in.");
-      }
+      // Handle errors
+      console.error("Error Response:", error.response);
+      const errorMessage = error.response?.data?.message || "Login failed";
+      toast.error(errorMessage);
     }
   };
   

@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: (origin, callback) => {
       const allowedOrigins = [
-        'https://fullstack-puirrnj5p-hirumis-projects.vercel.app/',
+        'https://fullstack-puirrnj5p-hirumis-projects.vercel.app',
         'https://fullstackadmin-mj9ulisk8-hirumis-projects.vercel.app'
       ];
       if (!origin || allowedOrigins.includes(origin)) {

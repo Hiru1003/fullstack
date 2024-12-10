@@ -17,7 +17,7 @@ const Dashboard = () => {
         console.log("Auth Token:", authToken);
   
         if (!authToken) {
-          throw new Error("Authentication token not found");
+          throw new Error("Authentication token not found. Please log in.");
         }
   
         const { data } = await axios.get(
@@ -32,16 +32,22 @@ const Dashboard = () => {
         setAppointments(data.appointments);
       } catch (error) {
         console.error("Error fetching appointments:", error.response || error);
-        setAppointments([]);
+        setAppointments([]); // Clear appointments if fetching fails
         const errorMessage =
           error.response?.data?.message || "Failed to fetch appointments";
         toast.error(errorMessage);
         setError(errorMessage);
+  
+        // Optional: Redirect to login page if the token is missing
+        if (error.message.includes("Authentication token not found")) {
+          navigateTo("/login"); // Replace with your login page route
+        }
       }
     };
   
     fetchAppointments();
   }, []);
+  
   
   
   

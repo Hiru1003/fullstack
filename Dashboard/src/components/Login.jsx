@@ -16,40 +16,40 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Validate input fields
+  
     if (!email || !password || !confirmPassword) {
       toast.error("Please fill in all fields!");
       return;
     }
-
+  
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-
+  
+    const role = "Admin"; // Hardcoded role for admin login
+  
     try {
-      // Send request to backend
+      console.log("Request Payload:", { email, password, confirmPassword, role }); // Debugging
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
-        { email, password, confirmPassword, role },
+        { email, password, confirmPassword, role }, // Ensure confirmPassword is included here
         {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       );
-
-      // Success handling
+  
       toast.success(response.data.message);
       setIsAuthenticated(true);
       navigateTo("/");
     } catch (error) {
-      // Error handling
       console.error("Error Response:", error.response);
       const errorMessage = error.response?.data?.message || "Login failed";
       toast.error(errorMessage);
     }
   };
+  
 
   if (isAuthenticated) {
     return <Navigate to={"/"} />;

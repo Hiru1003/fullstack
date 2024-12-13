@@ -8,6 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role] = useState("Admin"); 
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
@@ -15,44 +16,40 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
-    // Log input values for debugging
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
-  
+
+    // Validate input fields
     if (!email || !password || !confirmPassword) {
       toast.error("Please fill in all fields!");
       return;
     }
-  
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-  
+
     try {
+      // Send request to backend
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
-        { email, password, role: "Admin" },
+        { email, password, confirmPassword, role },
         {
           withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       );
-  
+
+      // Success handling
       toast.success(response.data.message);
       setIsAuthenticated(true);
       navigateTo("/");
     } catch (error) {
+      // Error handling
       console.error("Error Response:", error.response);
       const errorMessage = error.response?.data?.message || "Login failed";
       toast.error(errorMessage);
     }
   };
-  
-  
-  
 
   if (isAuthenticated) {
     return <Navigate to={"/"} />;
@@ -70,18 +67,21 @@ const Login = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
           <input
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            required
           />
           <div style={{ justifyContent: "center", alignItems: "center" }}>
             <button type="submit">Login</button>

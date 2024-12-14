@@ -20,7 +20,19 @@ dbConnection();
 // Set up CORS
 app.use(
   cors({
-    origin: '*',
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'https://fullstack-puirrnj5p-hirumis-projects.vercel.app',
+        'https://fullstackadmin-pli1md0rp-hirumis-projects.vercel.app',
+        'https://fullstackadmin-psi.vercel.app',
+        'https://fullstackadmin-2lp0u0w2f-hirumis-projects.vercel.app/'
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ['GET', 'POST', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import AddNewDoctor from "./components/AddNewDoctor";
@@ -15,28 +15,20 @@ import AddNewStaffMember from "./components/AddStaff";
 import Staff from "./components/Staff";
 import "./App.css";
 
-const App = () => {
-  return (
-    <Router>
-      <Sidebar />
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/doctor/addnew" element={<AddNewDoctor />} />
-        <Route path="/staff/addnew" element={<AddNewStaffMember />} />
-        <Route path="/admin/addnew" element={<AddNewAdmin />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/doctors" element={<Doctors />} />
-        <Route path="/staff" element={<Staff />} />
-      </Routes>
-      <ToastContainer position="top-center" />
-    </Router>
-  );
+// Custom navigation wrapper
+const NavigateWrapper = ({ to }) => {
+  const navigateTo = () => {
+    window.location.href = to; // Use window.location for navigation fallback
+  };
+
+  useEffect(() => {
+    navigateTo();
+  }, [to]);
+
+  return null;
 };
 
-// Moved `fetchUser` logic into a separate component
-const AuthProvider = () => {
-  const navigate = useNavigate();
+const App = () => {
   const { isAuthenticated, setIsAuthenticated, admin, setAdmin } = useContext(Context);
 
   useEffect(() => {
@@ -70,7 +62,7 @@ const AuthProvider = () => {
             localStorage.removeItem("authToken");
             setIsAuthenticated(false);
             setAdmin({});
-            navigate("/login");
+            <NavigateWrapper to="/login" />;
           } else {
             toast.error(`Error: ${data.message || error.message}`);
           }
@@ -86,14 +78,24 @@ const AuthProvider = () => {
     };
 
     fetchUser();
-  }, [navigate, setAdmin, setIsAuthenticated]);
+  }, [setAdmin, setIsAuthenticated]);
 
-  return null;
+  return (
+    <Router>
+      <Sidebar />
+      <Routes>
+        <Route path="/" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/doctor/addnew" element={<AddNewDoctor />} />
+        <Route path="/staff/addnew" element={<AddNewStaffMember />} />
+        <Route path="/admin/addnew" element={<AddNewAdmin />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/doctors" element={<Doctors />} />
+        <Route path="/staff" element={<Staff />} />
+      </Routes>
+      <ToastContainer position="top-center" />
+    </Router>
+  );
 };
 
-export default () => (
-  <>
-    <AuthProvider />
-    <App />
-  </>
-);
+export default App;

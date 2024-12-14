@@ -11,11 +11,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "./components/Sidebar";
 import AddNewAdmin from "./components/AddNewAdmin";
+import { useNavigate, Navigate } from "react-router-dom";
 import "./App.css";
 import AddNewStaffMember from "./components/AddStaff";
 import Staff from "./components/Staff";
 
 const App = () => {
+  const navigate = useNavigate(); // Use useNavigate for navigation
   const { isAuthenticated, setIsAuthenticated, admin, setAdmin } =
     useContext(Context);
 

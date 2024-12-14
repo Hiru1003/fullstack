@@ -56,7 +56,7 @@ const AdminLogin = () => {
       // Handle successful login
       toast.success(response.data.message);
       setIsAuthenticated(true);
-      navigateTo("/admin/dashboard"); // Redirect to the dashboard or appropriate page
+      navigateTo("/"); // Redirect to the dashboard or appropriate page
     } catch (error) {
       // Handle errors
       console.error("Error Response:", error.response);
@@ -68,7 +68,7 @@ const AdminLogin = () => {
   
 
   if (isAuthenticated) {
-    return <Navigate to={"/admin/dashboard"} />;
+    return <Navigate to={"/"} />;
   }
 
   return (

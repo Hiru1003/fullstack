@@ -13,52 +13,59 @@ const AdminLogin = () => {
 
   const navigateTo = useNavigate();
 
-  const handleAdminLogin = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Ensure all fields are filled
+  
+    // Debugging: Log inputs
+    console.log("Email:", email);
+    console.log("Password:", password);
+    console.log("Confirm Password:", confirmPassword);
+  
+    // Validate inputs
     if (!email || !password || !confirmPassword) {
       toast.error("Please fill in all fields!");
       return;
     }
-
-    // Ensure passwords match
+  
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-
+  
     try {
-      // Payload with all fields and role set to "Admin"
+      // Payload with confirmPassword and role
       const payload = {
         email,
         password,
         confirmPassword,
-        role: "Admin",
+        role: "Admin", // Adjust role as needed, e.g., "Admin", "Doctor", etc.
       };
-
-      console.log("Sending Admin Payload:", payload);
-
+  
+      console.log("Sending Payload:", payload); // Debugging: Log payload before sending
+  
+      // API call
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
         payload,
         {
-          withCredentials: true,
+          withCredentials: true, // Ensures cookies are sent
           headers: { "Content-Type": "application/json" },
         }
       );
-
-      // Success feedback
+  
+      // Handle successful login
       toast.success(response.data.message);
       setIsAuthenticated(true);
-      navigateTo("/admin-dashboard");
+      navigateTo("/admin/dashboard"); // Redirect to the dashboard or appropriate page
     } catch (error) {
-      // Log error and show feedback
+      // Handle errors
       console.error("Error Response:", error.response);
-      const errorMessage = error.response?.data?.message || "Admin login failed";
+      const errorMessage = error.response?.data?.message || "Login failed";
       toast.error(errorMessage);
     }
   };
+  
+  
 
   if (isAuthenticated) {
     return <Navigate to={"/admin/dashboard"} />;

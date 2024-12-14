@@ -23,21 +23,33 @@ const App = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        // API call to fetch user details
-        const response = await axios.get(
-          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me",
-          {
-            withCredentials: true, // Include cookies for authentication
+      const fetchUser = async () => {
+        try {
+          // Get the token from localStorage
+          const authToken = localStorage.getItem("authToken");
+          if (!authToken) {
+            throw new Error("No authentication token found.");
           }
-        );
-        setIsAuthenticated(true);
-        setUser(response.data.user);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setUser({});
-        setError("Failed to fetch user data. Please login again.");
-      }
+      
+          const response = await axios.get(
+            "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/patient/me",
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`, // Send token in Authorization header
+              },
+              withCredentials: true, // Include credentials if necessary
+            }
+          );
+          setIsAuthenticated(true);
+          setUser(response.data.user);
+        } catch (error) {
+          setIsAuthenticated(false);
+          setUser({});
+          setError("Failed to fetch user data. Please login again.");
+          console.error("Error fetching user:", error);
+        }
+      };
+      
     };
 
     // Fetch user data if authenticated

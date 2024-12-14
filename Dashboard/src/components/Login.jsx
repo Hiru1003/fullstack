@@ -19,19 +19,25 @@ const AdminLogin = () => {
     // Debugging: Log inputs
     console.log("Email:", email);
     console.log("Password:", password);
+    console.log("Confirm Password:", confirmPassword);
   
     // Validate inputs
-    if (!email || !password ) {
+    if (!email || !password || !confirmPassword) {
       toast.error("Please fill in all fields!");
       return;
     }
-
+  
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
   
     try {
       // Payload with confirmPassword and role
       const payload = {
         email,
         password,
+        confirmPassword,
         role: "Admin", // Adjust role as needed, e.g., "Admin", "Doctor", etc.
       };
   
@@ -90,12 +96,12 @@ const AdminLogin = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {/* <input
+          <input
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-          /> */}
+          />
           <div style={{ justifyContent: "center", alignItems: "center" }}>
             <button type="submit">Login</button>
           </div>

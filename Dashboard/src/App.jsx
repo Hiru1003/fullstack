@@ -16,38 +16,50 @@ import AddNewStaffMember from "./components/AddStaff";
 import Staff from "./components/Staff";
 
 const App = () => {
-  const { isAuthenticated, setIsAuthenticated, admin, setAdmin } =
-    useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, admin, setAdmin } = useContext(Context);
+  const navigate = useNavigate(); // To navigate programmatically on auth failure
 
-    useEffect(() => {
-      const fetchUser = async () => {
-        try {
-          // Get the token from localStorage
-          const authToken = localStorage.getItem("authToken");
-          if (!authToken) {
-            throw new Error("No authentication token found.");
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // Get the token from localStorage
+        const authToken = localStorage.getItem("authToken");
+        if (!authToken) {
+          throw new Error("No authentication token found.");
+        }
+
+        const response = await axios.get(
+          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`, // Send token in Authorization header
+            },
+            withCredentials: true, // Include credentials if necessary
           }
+        );
 
-          const response = await axios.get(
-            "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
-            {
-              headers: {
-                Authorization: `Bearer ${authToken}`, // Send token in Authorization header
-              },
-              withCredentials: true, // Include credentials if necessary
-            }
-          );
-          setIsAuthenticated(true);
-          setAdmin(response.data.user);
-        } catch (error) {
+        // If the token is valid, set authenticated state
+        setIsAuthenticated(true);
+        setAdmin(response.data.user);
+      } catch (error) {
+        console.error("Authentication error:", error);
+        
+        // If the token is invalid or expired, redirect to login
+        if (error.response?.data?.message === "Dashboard User is not authenticated!" || error.message === "No authentication token found.") {
+          localStorage.removeItem("authToken"); // Clear invalid token
+          setIsAuthenticated(false);
+          setAdmin({});
+          navigate("/login"); // Redirect to login
+        } else {
+          // Handle other errors appropriately
           setIsAuthenticated(false);
           setAdmin({});
         }
-      };
-      fetchUser();
-    }, [isAuthenticated]);
-    
-    
+      }
+    };
+
+    fetchUser();
+  }, [navigate, setIsAuthenticated, setAdmin]); 
 
   return (
     <Router>

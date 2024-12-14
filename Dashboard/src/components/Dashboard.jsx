@@ -10,12 +10,13 @@ const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [error, setError] = useState("");
   const navigate = useNavigate(); // Use useNavigate for navigation
+  const { isAuthenticated, admin } = useContext(Context);
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         const authToken = localStorage.getItem("authToken");
-        console.log("Auth Token:", authToken);
+        console.log("Auth Token:", authToken); // Debugging token
 
         if (!authToken) {
           throw new Error("Authentication token not found. Please log in.");
@@ -33,15 +34,17 @@ const Dashboard = () => {
         setAppointments(data.appointments);
       } catch (error) {
         console.error("Error fetching appointments:", error.response || error);
-        setAppointments([]); // Clear appointments if fetching fails
+        setAppointments([]);  // Clear appointments if fetching fails
+
         const errorMessage =
           error.response?.data?.message || "Failed to fetch appointments";
         toast.error(errorMessage);
         setError(errorMessage);
 
-        // Redirect to login page if the token is missing
+        // Redirect to login page if the token is missing or expired
         if (error.message.includes("Authentication token not found")) {
-          navigate("/login"); // Correct navigation method
+          localStorage.removeItem("authToken"); // Clear invalid token
+          navigate("/login"); // Redirect to login
         }
       }
     };
@@ -84,10 +87,9 @@ const Dashboard = () => {
     }
   };
 
-  const { isAuthenticated, admin } = useContext(Context);
-
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    // Redirect to login if the user is not authenticated
+    return <Navigate to="/login" replace />;
   }
 
   return (

@@ -18,32 +18,41 @@ const Dashboard = () => {
         // Get the token from localStorage
         const authToken = localStorage.getItem("authToken");
         if (!authToken) {
-          throw new Error("No authentication token found.");
+          throw new Error("No authentication token found. Please log in.");
         }
   
-        const { data } = await axios.get(
+        const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
             withCredentials: true,
             headers: {
-              Authorization: `Bearer ${authToken}`,
+              Authorization: `Bearer ${authToken}`, // Include token in Authorization header
             },
           }
         );
-        setAppointments(data.appointments);
+  
+        // Set appointments data on successful fetch
+        setAppointments(response.data.appointments);
       } catch (error) {
         console.error("Error fetching appointments:", error.response || error);
-        setAppointments([]);  // Clear appointments if fetching fails
   
+        // Clear appointments if fetching fails
+        setAppointments([]);
+        setError(error.response?.data?.message || "Failed to fetch appointments");
+  
+        // Show an appropriate error message using toast
         const errorMessage =
-          error.response?.data?.message || "Failed to fetch appointments";
+          error.response?.data?.message ||
+          (error.response?.status === 400
+            ? "Bad Request: Invalid request data or authentication issue."
+            : "An error occurred while fetching appointments.");
         toast.error(errorMessage);
-        setError(errorMessage);
   
-        // Redirect to login page if the token is missing or expired
+        // Handle token-related issues: Redirect to login
         if (
-          error.message.includes("Authentication token not found") ||
-          error.response?.data?.message === "Token has expired"
+          error.message.includes("authentication token") || // Local error
+          error.response?.status === 401 || // Unauthorized
+          error.response?.data?.message === "Token has expired" // Expired token
         ) {
           localStorage.removeItem("authToken"); // Clear invalid token
           navigate("/login"); // Redirect to login
@@ -53,6 +62,7 @@ const Dashboard = () => {
   
     fetchAppointments();
   }, [navigate]);
+  
   
 
   const handleUpdateStatus = async (appointmentId, status) => {

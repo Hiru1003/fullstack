@@ -23,7 +23,7 @@ app.use(
     origin: (origin, callback) => {
       const allowedOrigins = [
         'https://fullstack-puirrnj5p-hirumis-projects.vercel.app',
-        'https://fullstackadmin-jxxuaokvg-hirumis-projects.vercel.app'
+        'https://fullstackadmin-pli1md0rp-hirumis-projects.vercel.app'
       ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);

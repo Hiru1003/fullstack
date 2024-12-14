@@ -55,6 +55,7 @@ const AdminLogin = () => {
   
       // Handle successful login
       toast.success(response.data.message);
+      localStorage.setItem("authToken", response.data.token);
       setIsAuthenticated(true);
       navigateTo("/"); // Redirect to the dashboard or appropriate page
     } catch (error) {

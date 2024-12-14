@@ -22,10 +22,19 @@ const App = () => {
     useEffect(() => {
       const fetchUser = async () => {
         try {
+          // Get the token from localStorage
+          const authToken = localStorage.getItem("authToken");
+          if (!authToken) {
+            throw new Error("No authentication token found.");
+          }
+
           const response = await axios.get(
             "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
             {
-              withCredentials: true, // Ensures cookies are sent
+              headers: {
+                Authorization: `Bearer ${authToken}`, // Send token in Authorization header
+              },
+              withCredentials: true, // Include credentials if necessary
             }
           );
           setIsAuthenticated(true);

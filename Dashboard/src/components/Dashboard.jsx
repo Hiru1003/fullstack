@@ -15,11 +15,10 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
+        // Get the token from localStorage
         const authToken = localStorage.getItem("authToken");
-        console.log("Auth Token:", authToken); // Debugging token
-  
         if (!authToken) {
-          throw new Error("Authentication token not found. Please log in.");
+          throw new Error("No authentication token found.");
         }
   
         const { data } = await axios.get(

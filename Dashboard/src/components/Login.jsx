@@ -1,95 +1,113 @@
 import React, { useContext, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Context } from "../main";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Login = () => {
+const AdminLogin = () => {
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role] = useState("Admin"); 
-
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const [role] = useState("Admin"); // Hardcoded role for admin login
 
   const navigateTo = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
+    // Debugging: Log inputs
+    console.log("Email:", email);
+    console.log("Password:", password);
+    console.log("Confirm Password:", confirmPassword);
+
+    // Validate inputs
     if (!email || !password || !confirmPassword) {
       toast.error("Please fill in all fields!");
       return;
     }
-  
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-  
-    const role = "Admin"; // Hardcoded role for admin login
-  
+
     try {
-      console.log("Request Payload:", { email, password, confirmPassword, role }); // Debugging
+      // Payload with confirmPassword and role
+      const payload = {
+        email,
+        password,
+        confirmPassword,
+        role,
+      };
+
+      console.log("Sending Payload:", payload); // Debugging: Log payload before sending
+
+      // API call
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
-        { email, password, confirmPassword, role }, // Ensure confirmPassword is included here
+        payload,
         {
-          withCredentials: true,
+          withCredentials: true, // Ensures cookies are sent
           headers: { "Content-Type": "application/json" },
         }
       );
-  
+
+      // Handle successful login
       toast.success(response.data.message);
       setIsAuthenticated(true);
-      navigateTo("/");
+      navigateTo("/admin/dashboard"); // Redirect to the admin dashboard or appropriate page
     } catch (error) {
+      // Handle errors
       console.error("Error Response:", error.response);
       const errorMessage = error.response?.data?.message || "Login failed";
       toast.error(errorMessage);
     }
   };
-  
 
   if (isAuthenticated) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/admin/dashboard"} />;
   }
 
   return (
     <>
-      <section className="container form-component">
-        <img src="/logo.png" alt="logo" className="logo" />
-        <h1 className="form-title">WELCOME TO MEDICARE</h1>
-        <p>Only Admins Are Allowed To Access These Resources!</p>
+      <div className="container form-component login-form">
+        <br />
+        <br />
+        <br />
+        <h2>Admin Sign In</h2>
+        <p>Please Login To Access Admin Resources</p>
+        <p>
+          Welcome back! Log in to your admin account to manage the platform
+          effectively.
+        </p>
         <form onSubmit={handleLogin}>
           <input
             type="text"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
           <input
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            required
           />
           <div style={{ justifyContent: "center", alignItems: "center" }}>
             <button type="submit">Login</button>
           </div>
         </form>
-      </section>
+      </div>
     </>
   );
 };
 
-export default Login;
+export default AdminLogin;

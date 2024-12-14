@@ -10,58 +10,52 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role] = useState("Admin"); // Hardcoded role for admin login
 
   const navigateTo = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleAdminLogin = async (e) => {
     e.preventDefault();
 
-    // Debugging: Log inputs
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
-
-    // Validate inputs
+    // Ensure all fields are filled
     if (!email || !password || !confirmPassword) {
       toast.error("Please fill in all fields!");
       return;
     }
 
+    // Ensure passwords match
     if (password !== confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
 
     try {
-      // Payload with confirmPassword and role
+      // Payload with all fields and role set to "Admin"
       const payload = {
         email,
         password,
         confirmPassword,
-        role,
+        role: "Admin",
       };
 
-      console.log("Sending Payload:", payload); // Debugging: Log payload before sending
+      console.log("Sending Admin Payload:", payload);
 
-      // API call
       const response = await axios.post(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/login",
         payload,
         {
-          withCredentials: true, // Ensures cookies are sent
+          withCredentials: true,
           headers: { "Content-Type": "application/json" },
         }
       );
 
-      // Handle successful login
+      // Success feedback
       toast.success(response.data.message);
       setIsAuthenticated(true);
-      navigateTo("/admin/dashboard"); // Redirect to the admin dashboard or appropriate page
+      navigateTo("/admin-dashboard");
     } catch (error) {
-      // Handle errors
+      // Log error and show feedback
       console.error("Error Response:", error.response);
-      const errorMessage = error.response?.data?.message || "Login failed";
+      const errorMessage = error.response?.data?.message || "Admin login failed";
       toast.error(errorMessage);
     }
   };

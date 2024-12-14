@@ -59,7 +59,7 @@ const App = () => {
     };
 
     fetchUser();
-  }, [navigate, setIsAuthenticated, setAdmin]); 
+  }, [navigate, setIsAuthenticated, setAdmin]); // Ensure effect runs on navigate or state change
 
   return (
     <Router>
@@ -68,7 +68,7 @@ const App = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/doctor/addnew" element={<AddNewDoctor />} />
-        <Route path="/staff/addnew" element={<AddNewStaffMember/>} />
+        <Route path="/staff/addnew" element={<AddNewStaffMember />} />
         <Route path="/admin/addnew" element={<AddNewAdmin />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/doctors" element={<Doctors />} />

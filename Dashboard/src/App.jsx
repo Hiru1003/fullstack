@@ -22,51 +22,33 @@ const App = () => {
     useEffect(() => {
       const fetchUser = async () => {
         try {
-          // Get the token from localStorage
           const authToken = localStorage.getItem("authToken");
-          if (!authToken) {
-            throw new Error("No authentication token found.");
-          }
-  
+          if (!authToken) throw new Error("No authentication token found.");
+    
           const response = await axios.get(
             "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
             {
-              headers: {
-                Authorization: `Bearer ${authToken}`, // Send token in Authorization header
-              },
-              withCredentials: true, // Include credentials if necessary
+              headers: { Authorization: `Bearer ${authToken}` },
+              withCredentials: true,
             }
           );
-  
           setIsAuthenticated(true);
           setAdmin(response.data.user);
         } catch (error) {
-          // Handling different types of errors
-          if (error.response) {
-            // If the error response exists
-            if (error.response.status === 400) {
-              toast.error("Bad Request: Please check your request parameters.");
-            } else if (error.response.status === 401) {
-              toast.error("Unauthorized: Your session has expired or the token is invalid.");
-              localStorage.removeItem("authToken"); // Remove invalid token
-              setIsAuthenticated(false);
-              setAdmin({});
-              navigate("/login"); // Redirect to login page
-            } else {
-              toast.error(`Error: ${error.response.data.message || error.message}`);
-            }
-          } else {
-            // For network errors or other types of errors
-            toast.error("Network error or server unreachable. Please try again later.");
-          }
-  
+          console.error("Error fetching user:", error.response || error);
           setIsAuthenticated(false);
           setAdmin({});
+          localStorage.removeItem("authToken");
+          toast.error(
+            error.response?.data?.message || "Authentication failed. Please log in."
+          );
+          navigate("/login");
         }
       };
-  
+    
       fetchUser();
-    }, [isAuthenticated]);
+    }, [navigate]);
+    
     
     
 

@@ -15,50 +15,28 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        // Get the token from localStorage
         const authToken = localStorage.getItem("authToken");
-        if (!authToken) {
-          throw new Error("No authentication token found. Please log in.");
-        }
-  
+        if (!authToken) throw new Error("No authentication token found.");
+    
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
+            headers: { Authorization: `Bearer ${authToken}` },
             withCredentials: true,
-            headers: {
-              Authorization: `Bearer ${authToken}`, // Include token in Authorization header
-            },
           }
         );
-  
-        // Set appointments data on successful fetch
         setAppointments(response.data.appointments);
       } catch (error) {
         console.error("Error fetching appointments:", error.response || error);
-  
-        // Clear appointments if fetching fails
         setAppointments([]);
-        setError(error.response?.data?.message || "Failed to fetch appointments");
-  
-        // Show an appropriate error message using toast
-        const errorMessage =
-          error.response?.data?.message ||
-          (error.response?.status === 400
-            ? "Bad Request: Invalid request data or authentication issue."
-            : "An error occurred while fetching appointments.");
-        toast.error(errorMessage);
-  
-        // Handle token-related issues: Redirect to login
-        if (
-          error.message.includes("authentication token") || // Local error
-          error.response?.status === 401 || // Unauthorized
-          error.response?.data?.message === "Token has expired" // Expired token
-        ) {
-          localStorage.removeItem("authToken"); // Clear invalid token
-          navigate("/login"); // Redirect to login
-        }
+        localStorage.removeItem("authToken");
+        toast.error(
+          error.response?.data?.message || "Failed to fetch appointments."
+        );
+        navigate("/login");
       }
     };
+    
   
     fetchAppointments();
   }, [navigate]);

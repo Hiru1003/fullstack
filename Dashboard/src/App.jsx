@@ -7,15 +7,17 @@ import Messages from "./components/Messages";
 import Doctors from "./components/Doctors";
 import { Context } from "./main";
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "./components/Sidebar";
 import AddNewAdmin from "./components/AddNewAdmin";
 import "./App.css";
+import { useNavigate, Navigate } from "react-router-dom";
 import AddNewStaffMember from "./components/AddStaff";
 import Staff from "./components/Staff";
 
-const App = () => {
+const App = () => {  
+  const navigate = useNavigate(); // Use useNavigate for navigation
   const { isAuthenticated, setIsAuthenticated, admin, setAdmin } =
     useContext(Context);
 
@@ -27,7 +29,8 @@ const App = () => {
           if (!authToken) {
             throw new Error("No authentication token found.");
           }
-  
+    
+          // Fetch user details
           const response = await axios.get(
             "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/me",
             {
@@ -37,36 +40,43 @@ const App = () => {
               withCredentials: true, // Include credentials if necessary
             }
           );
-  
+    
+          // If response is successful, update state
           setIsAuthenticated(true);
           setAdmin(response.data.user);
         } catch (error) {
-          // Handling different types of errors
+          // Error handling
           if (error.response) {
-            // If the error response exists
-            if (error.response.status === 400) {
+            const { status, data } = error.response;
+    
+            if (status === 400) {
               toast.error("Bad Request: Please check your request parameters.");
-            } else if (error.response.status === 401) {
+            } else if (status === 401) {
               toast.error("Unauthorized: Your session has expired or the token is invalid.");
               localStorage.removeItem("authToken"); // Remove invalid token
               setIsAuthenticated(false);
               setAdmin({});
               navigate("/login"); // Redirect to login page
             } else {
-              toast.error(`Error: ${error.response.data.message || error.message}`);
+              toast.error(`Error: ${data.message || error.message}`);
             }
+          } else if (error.request) {
+            // Request made but no response received
+            toast.error("No response from the server. Please try again later.");
           } else {
-            // For network errors or other types of errors
-            toast.error("Network error or server unreachable. Please try again later.");
+            // Other errors
+            toast.error(`Error: ${error.message}`);
           }
-  
+    
+          // Reset state in case of error
           setIsAuthenticated(false);
           setAdmin({});
         }
       };
-  
+    
       fetchUser();
-    }, [isAuthenticated]);
+    }, [isAuthenticated, navigate]);
+    
     
     
 

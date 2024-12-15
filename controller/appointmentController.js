@@ -88,6 +88,7 @@ export const postAppointment = catchAsyncErrors(async (req, res, next) => {
       appointments,
     });
   });
+  
   export const updateAppointmentStatus = catchAsyncErrors(
     async (req, res, next) => {
       const { id } = req.params;

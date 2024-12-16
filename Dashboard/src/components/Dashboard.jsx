@@ -15,40 +15,42 @@ const Dashboard = () => {
     const fetchAppointments = async () => {
       try {
         const authToken = localStorage.getItem("authToken");
-        if (!authToken) throw new Error("No authentication token found.");
-
+        if (!authToken) {
+          throw new Error("No authentication token found.");
+        }
+  
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
             headers: { Authorization: `Bearer ${authToken}` },
+            withCredentials: true,
           }
         );
-
+  
         setAppointments(response.data.appointments || []);
       } catch (error) {
-        const errorMessage =
-          error.response?.data?.message || "Failed to fetch appointments.";
-        toast.error(errorMessage);
-
-        // Redirect to login if token is invalid
-        if (
-          ["Token has expired", "Dashboard User is not authenticated!"].includes(
-            error.response?.data?.message
-          )
-        ) {
-          localStorage.removeItem("authToken");
-          navigate("/login");
+        if (error.response) {
+          const { status, data } = error.response;
+  
+          if (status === 401 || data.message === "Dashboard User is not authenticated!") {
+            toast.error("Unauthorized: Your session has expired or the token is invalid.");
+            localStorage.removeItem("authToken");
+            navigate("/login");
+          } else if (status === 400) {
+            toast.error("Bad Request: Please check your request parameters.");
+          } else {
+            toast.error(data.message || "An unexpected error occurred.");
+          }
+        } else if (error.request) {
+          toast.error("No response from the server. Please try again later.");
+        } else {
+          toast.error(`Error: ${error.message}`);
         }
       }
     };
-
+  
     fetchAppointments();
   }, [navigate]);
-  
-  
-  
-  
-  
   
 
   const handleUpdateStatus = async (appointmentId, status) => {

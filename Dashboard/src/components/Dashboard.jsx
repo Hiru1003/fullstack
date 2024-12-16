@@ -16,14 +16,21 @@ const Dashboard = () => {
       try {
         const authToken = localStorage.getItem("authToken");
         if (!authToken) {
-          throw new Error("No authentication token found.");
+          toast.error("Authentication token is missing. Redirecting to login...");
+          navigate("/login");
+          return;
         }
+  
+        // Debugging step: Ensure the token is present in headers
+        console.log("Auth Token:", authToken);
   
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
-            headers: { Authorization: `Bearer ${authToken}` },
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+            withCredentials: true, // Ensure cookies are sent if required
           }
         );
   
@@ -32,6 +39,7 @@ const Dashboard = () => {
         if (error.response) {
           const { status, data } = error.response;
   
+          // Handle specific error messages
           if (status === 401 || data.message === "Dashboard User is not authenticated!") {
             toast.error("Unauthorized: Your session has expired or the token is invalid.");
             localStorage.removeItem("authToken");
@@ -51,6 +59,7 @@ const Dashboard = () => {
   
     fetchAppointments();
   }, [navigate]);
+  
   
 
   const handleUpdateStatus = async (appointmentId, status) => {

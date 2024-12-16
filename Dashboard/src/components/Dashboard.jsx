@@ -8,8 +8,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
-  const [error, setError] = useState("");
-  const navigate = useNavigate(); // Use useNavigate for navigation
+  const navigate = useNavigate();
   const { isAuthenticated, admin } = useContext(Context);
 
   useEffect(() => {
@@ -17,34 +16,32 @@ const Dashboard = () => {
       try {
         const authToken = localStorage.getItem("authToken");
         if (!authToken) throw new Error("No authentication token found.");
-    
+
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
             headers: { Authorization: `Bearer ${authToken}` },
           }
         );
-    
-        console.log("Appointments:", response.data.appointments);
+
         setAppointments(response.data.appointments || []);
       } catch (error) {
-        console.error("Error fetching appointments:", error.response || error);
-        toast.error(
-          error.response?.data?.message || "Failed to fetch appointments"
-        );
-    
+        const errorMessage =
+          error.response?.data?.message || "Failed to fetch appointments.";
+        toast.error(errorMessage);
+
+        // Redirect to login if token is invalid
         if (
           ["Token has expired", "Dashboard User is not authenticated!"].includes(
             error.response?.data?.message
           )
         ) {
-          localStorage.removeItem("authToken"); // Clear invalid token
+          localStorage.removeItem("authToken");
           navigate("/login");
         }
       }
     };
-    
-  
+
     fetchAppointments();
   }, [navigate]);
   

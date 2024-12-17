@@ -9,51 +9,63 @@ import { AiFillCloseCircle } from "react-icons/ai";
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const navigate = useNavigate();
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, admin } = useContext(Context);
 
   useEffect(() => {
     const fetchAppointments = async () => {
-      try {
-        const authToken = localStorage.getItem("authToken");
-        if (!authToken) {
-          throw new Error("No authentication token found.");
-        }
+      const authToken = localStorage.getItem("authToken");
 
+      // Check for missing authentication token
+      if (!authToken) {
+        toast.error("No authentication token found. Redirecting to login...");
+        navigate("/login");
+        return;
+      }
+
+      try {
+        // Make the API call to fetch appointments
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
+            headers: { Authorization: `Bearer ${authToken}` },
             withCredentials: true,
           }
         );
 
-        setIsAuthenticated(true);
+        console.log("Appointments Response:", response.data);
+
+        // Set appointments to the state if data exists
+        setAppointments(response.data.appointments || []);
+        toast.success("Appointments fetched successfully!");
       } catch (error) {
         if (error.response) {
           const { status, data } = error.response;
 
-          if (status === 400) {
-            toast.error("Bad Request: Please check your request parameters.");
-          } else if (status === 401) {
-            toast.error("Unauthorized: Your session has expired or the token is invalid.");
+          console.error("Error Response:", data);
+
+          if (status === 401 || data.message === "Dashboard User is not authenticated!") {
+            toast.error("Unauthorized: Session expired or token invalid. Redirecting to login...");
             localStorage.removeItem("authToken");
+            navigate("/login");
+          } else if (status === 400) {
+            toast.error("Bad Request: Invalid request sent.");
           } else {
-            toast.error(`Error: ${data.message || error.message}`);
+            toast.error(data.message || "An unexpected server error occurred.");
           }
         } else if (error.request) {
+          console.error("No Server Response:", error.request);
           toast.error("No response from the server. Please try again later.");
         } else {
+          console.error("Request Error:", error.message);
           toast.error(`Error: ${error.message}`);
         }
-
       }
     };
-  
+
     fetchAppointments();
   }, [navigate]);
   
+
 
   const handleUpdateStatus = async (appointmentId, status) => {
     try {

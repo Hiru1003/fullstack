@@ -9,57 +9,50 @@ import { AiFillCloseCircle } from "react-icons/ai";
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const navigate = useNavigate();
-  const { isAuthenticated, admin } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         const authToken = localStorage.getItem("authToken");
         if (!authToken) {
-          toast.error("Authentication token is missing. Redirecting to login...");
-          navigate("/login");
-          return;
+          throw new Error("No authentication token found.");
         }
-  
-        // Debugging step: Ensure the token is present in headers
-        console.log("Auth Token:", authToken);
-  
+
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
             },
-            withCredentials: true, // Ensure cookies are sent if required
+            withCredentials: true,
           }
         );
-  
-        setAppointments(response.data.appointments || []);
+
+        setIsAuthenticated(true);
       } catch (error) {
         if (error.response) {
           const { status, data } = error.response;
-  
-          // Handle specific error messages
-          if (status === 401 || data.message === "Dashboard User is not authenticated!") {
+
+          if (status === 400) {
+            toast.error("Bad Request: Please check your request parameters.");
+          } else if (status === 401) {
             toast.error("Unauthorized: Your session has expired or the token is invalid.");
             localStorage.removeItem("authToken");
-            navigate("/login");
-          } else if (status === 400) {
-            toast.error("Bad Request: Please check your request parameters.");
           } else {
-            toast.error(data.message || "An unexpected error occurred.");
+            toast.error(`Error: ${data.message || error.message}`);
           }
         } else if (error.request) {
           toast.error("No response from the server. Please try again later.");
         } else {
           toast.error(`Error: ${error.message}`);
         }
+
       }
     };
   
     fetchAppointments();
   }, [navigate]);
-  
   
 
   const handleUpdateStatus = async (appointmentId, status) => {

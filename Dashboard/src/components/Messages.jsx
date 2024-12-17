@@ -12,15 +12,32 @@ const Messages = () => {
       try {
         const { data } = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/message/getall",
-          { withCredentials: true }
+          {
+            withCredentials: true, // Ensure credentials are sent
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Add JWT token if needed
+            },
+          }
         );
-        setMessages(data.messages);
+
+        // Assuming the data structure contains messages in the 'messages' key
+        if (data && data.messages) {
+          setMessages(data.messages);
+        } else {
+          console.error("No messages found in response data");
+        }
       } catch (error) {
-        console.log(error.response.data.message);
+        // Better error handling
+        if (error.response) {
+          console.error("Error fetching messages:", error.response.data.message);
+        } else {
+          console.error("Network error or request failed:", error);
+        }
       }
     };
+
     fetchMessages();
-  }, []);
+  }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     return <Navigate to={"/login"} />;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../main";
 import { useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
@@ -8,8 +8,9 @@ import { AiFillCloseCircle } from "react-icons/ai";
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
-  const navigate = useNavigate();
   const { isAuthenticated, admin } = useContext(Context);
+  const navigate = useNavigate();
+  const isInitialFetch = useRef(true); // To prevent repeated toasts
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -18,7 +19,7 @@ const Dashboard = () => {
         if (!authToken) {
           throw new Error("No authentication token found.");
         }
-  
+
         const response = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
           {
@@ -26,30 +27,35 @@ const Dashboard = () => {
             withCredentials: true,
           }
         );
-  
+
         setAppointments(response.data.appointments || []);
       } catch (error) {
-        if (error.response) {
-          const { status, data } = error.response;
-  
-          if (status === 401 || data.message === "Dashboard User is not authenticated!") {
-            toast.error("Unauthorized: Your session has expired or the token is invalid.");
-            localStorage.removeItem("authToken");
-            navigate("/login");
-          } else if (status === 400) {
-            toast.error("Bad Request: Please check your request parameters.");
+        if (isInitialFetch.current) {
+          if (error.response) {
+            const { status, data } = error.response;
+
+            if (status === 401 || data.message === "Dashboard User is not authenticated!") {
+              toast.error("Unauthorized: Your session has expired or the token is invalid.");
+              localStorage.removeItem("authToken");
+              navigate("/login");
+            } else if (status === 400) {
+              toast.error("Bad Request: Please check your request parameters.");
+            } else {
+              toast.error(data.message || "An unexpected error occurred.");
+            }
+          } else if (error.request) {
+            toast.error("No response from the server. Please try again later.");
           } else {
-            toast.error(data.message || "An unexpected error occurred.");
+            toast.error(`Error: ${error.message}`);
           }
-        } else if (error.request) {
-          toast.error("No response from the server. Please try again later.");
-        } else {
-          toast.error(`Error: ${error.message}`);
+          isInitialFetch.current = false; // Prevent further toasts
         }
       }
     };
-  
-    fetchAppointments();
+
+    if (isInitialFetch.current) {
+      fetchAppointments();
+    }
   }, [navigate]);
   
 

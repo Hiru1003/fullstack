@@ -10,16 +10,22 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const { data } = await axios.get(
-          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
-          { withCredentials: true }
+        const response = await axios.get(
+          "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall"
         );
-        setAppointments(data.appointments );
+
+        setAppointments(response.data.appointments || []);
       } catch (error) {
-        toast.error(error.response.data.message);
+        if (error.response) {
+          const { data } = error.response;
+          toast.error(data.message || "An unexpected error occurred.");
+        } else if (error.request) {
+          toast.error("No response from the server. Please try again later.");
+        } else {
+          toast.error(`Error: ${error.message}`);
+        }
       }
     };
-    fetchDoctors();
 
     fetchAppointments();
   }, []);

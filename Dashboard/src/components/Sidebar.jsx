@@ -23,7 +23,7 @@ const Sidebar = () => {
       // Sending logout request to the backend
       const response = await axios.get(
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/logout",
-        { withCredentials: true }  // Ensure cookies are sent with the request
+        { withCredentials: true } // Ensure cookies are sent with the request
       );
       
       // Show success toast message
@@ -32,16 +32,17 @@ const Sidebar = () => {
       // Update authentication state to false
       setIsAuthenticated(false);
   
-      // Optionally, redirect to login page after logout
-      navigateTo("/login");
+      // Redirect to login page after logout
+      navigate("/login");
   
-      // Clear any other data if needed (like user info)
+      // Optionally, clear any other data if needed (like user info)
     } catch (error) {
       // Handle error
       const errorMessage = error.response?.data?.message || "Logout failed";
       toast.error(errorMessage);
     }
   };
+
   
 
   const navigateTo = useNavigate();

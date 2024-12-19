@@ -34,12 +34,15 @@ const Dashboard = () => {
           if (error.response) {
             const { status, data } = error.response;
 
-            if (status === 401 || data.message === "Dashboard User is not authenticated!") {
-              toast.error("Unauthorized: Your session has expired or the token is invalid.");
+            if (
+              status === 401 ||
+              data.message === "Dashboard User is not authenticated!"
+            ) {
+              toast.error(
+                "Unauthorized: Your session has expired or the token is invalid."
+              );
               localStorage.removeItem("authToken");
               navigate("/login");
-            } else if (status === 400) {
-              toast.error("Bad Request: Please check your request parameters.");
             } else {
               toast.error(data.message || "An unexpected error occurred.");
             }
@@ -57,8 +60,6 @@ const Dashboard = () => {
       fetchAppointments();
     }
   }, [navigate]);
-  
-
 
   const handleUpdateStatus = async (appointmentId, status) => {
     try {

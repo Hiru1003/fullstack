@@ -13,12 +13,15 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { FaPeopleGroup } from "react-icons/fa6";
 
-
 const Sidebar = () => {
   const [show, setShow] = useState(false);
+  const { setIsAuthenticated } = useContext(Context);
+  const navigate = useNavigate();
 
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
   const handleLogout = async () => {
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (!confirmLogout) return; // If the user cancels, do nothing
+
     try {
       // Sending logout request to the backend
       const response = await axios.get(
@@ -34,8 +37,6 @@ const Sidebar = () => {
   
       // Redirect to login page after logout
       navigate("/login");
-  
-      // Optionally, clear any other data if needed (like user info)
     } catch (error) {
       // Handle error
       const errorMessage = error.response?.data?.message || "Logout failed";
@@ -43,60 +44,50 @@ const Sidebar = () => {
     }
   };
 
-  
-
-  const navigateTo = useNavigate();
-
   const gotoHomePage = () => {
-    navigateTo("/");
+    navigate("/");
     setShow(!show);
   };
   const gotoDoctorsPage = () => {
-    navigateTo("/doctors");
+    navigate("/doctors");
     setShow(!show);
   };
   const gotoStaffPage = () => {
-    navigateTo("/staff");
+    navigate("/staff");
     setShow(!show);
   };
   const gotoMessagesPage = () => {
-    navigateTo("/messages");
+    navigate("/messages");
     setShow(!show);
   };
   const gotoAddNewDoctor = () => {
-    navigateTo("/doctor/addnew");
+    navigate("/doctor/addnew");
     setShow(!show);
   };
-  const gotoaddNewStaffMember= () => {
-    navigateTo("/staff/addnew");
+  const gotoAddNewStaffMember = () => {
+    navigate("/staff/addnew");
     setShow(!show);
   };
   const gotoAddNewAdmin = () => {
-    navigateTo("/admin/addnew");
+    navigate("/admin/addnew");
     setShow(!show);
   };
 
   return (
     <>
-      <nav
-        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
-        className={show ? "show sidebar" : "sidebar"}
-      >
+      <nav className={show ? "show sidebar" : "sidebar"}>
         <div className="links">
           <TiHome onClick={gotoHomePage} />
           <FaUserDoctor onClick={gotoDoctorsPage} />
-          <FaPeopleGroup onClick={gotoStaffPage}/>
+          <FaPeopleGroup onClick={gotoStaffPage} />
           <MdAddModerator onClick={gotoAddNewAdmin} />
           <IoPersonAddSharp onClick={gotoAddNewDoctor} />
-          <AiOutlineUsergroupAdd onClick={gotoaddNewStaffMember} />
+          <AiOutlineUsergroupAdd onClick={gotoAddNewStaffMember} />
           <AiFillMessage onClick={gotoMessagesPage} />
           <RiLogoutBoxFill onClick={handleLogout} />
         </div>
       </nav>
-      <div
-        className="wrapper"
-        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
-      >
+      <div className="wrapper">
         <GiHamburgerMenu className="hamburger" onClick={() => setShow(!show)} />
       </div>
     </>

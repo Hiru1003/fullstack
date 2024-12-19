@@ -56,7 +56,7 @@ const App = () => {
           const { status, data } = error.response;
 
           if (status === 400) {
-            toast.error("Bad Request: Please check your request parameters.");
+            toast.error("Login Required");
           } else if (status === 401) {
             toast.error("Unauthorized: Your session has expired or the token is invalid.");
             localStorage.removeItem("authToken");

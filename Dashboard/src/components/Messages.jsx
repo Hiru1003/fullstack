@@ -7,6 +7,7 @@ import { Navigate } from "react-router-dom";
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const { isAuthenticated } = useContext(Context);
+  
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -14,9 +15,6 @@ const Messages = () => {
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/message/getall",
           {
             withCredentials: true, // Ensure credentials are sent
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Add JWT token if needed
-            },
           }
         );
 
@@ -37,7 +35,7 @@ const Messages = () => {
     };
 
     fetchMessages();
-  }, [isAuthenticated]);
+  }, []);
 
   if (!isAuthenticated) {
     return <Navigate to={"/login"} />;

@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Context } from "../main";
-import { useNavigate, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { GoCheckCircleFill } from "react-icons/go";
@@ -8,77 +6,29 @@ import { AiFillCloseCircle } from "react-icons/ai";
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
-  const { isAuthenticated, admin } = useContext(Context);
-  const navigate = useNavigate();
-  const isInitialFetch = useRef(true); // To prevent repeated toasts
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const authToken = localStorage.getItem("authToken");
-        if (!authToken) {
-          throw new Error("No authentication token found.");
-        }
-
-        const response = await axios.get(
+        const { data } = await axios.get(
           "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/getall",
-          {
-            headers: { Authorization: `Bearer ${authToken}` },
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
-
-        setAppointments(response.data.appointments || []);
+        setAppointments(data.appointments );
       } catch (error) {
-        if (isInitialFetch.current) {
-          if (error.response) {
-            const { status, data } = error.response;
-
-            if (
-              status === 401 ||
-              data.message === "Dashboard User is not authenticated!"
-            ) {
-              toast.error(
-                "Unauthorized: Your session has expired or the token is invalid."
-              );
-              localStorage.removeItem("authToken");
-              navigate("/login");
-            } else {
-              toast.error(data.message || "An unexpected error occurred.");
-            }
-          } else if (error.request) {
-            toast.error("No response from the server. Please try again later.");
-          } else {
-            toast.error(`Error: ${error.message}`);
-          }
-          isInitialFetch.current = false; // Prevent further toasts
-        }
+        toast.error(error.response.data.message);
       }
     };
+    fetchDoctors();
 
-    if (isInitialFetch.current) {
-      fetchAppointments();
-    }
-  }, [navigate]);
+    fetchAppointments();
+  }, []);
 
   const handleUpdateStatus = async (appointmentId, status) => {
     try {
-      const authToken = localStorage.getItem("authToken");
-      if (!authToken) {
-        toast.error("Authentication token missing.");
-        navigate("/login");
-        return;
-      }
-
       const { data } = await axios.put(
         `https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/appointment/update/${appointmentId}`,
-        { status },
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
+        { status }
       );
 
       setAppointments((prevAppointments) =>
@@ -96,11 +46,6 @@ const Dashboard = () => {
     }
   };
 
-  if (!isAuthenticated) {
-    // Redirect to login if the user is not authenticated
-    return <Navigate to="/login" replace />;
-  }
-
   return (
     <section className="dashboard page">
       <div className="banner">
@@ -109,7 +54,7 @@ const Dashboard = () => {
           <div className="content">
             <div>
               <p>Hello,</p>
-              <h5>{admin && `${admin.firstName} ${admin.lastName}`}</h5>
+              <h5>Admin</h5>
             </div>
             <p>
               Hello, Admin! We're glad to have you back. Here, you can manage

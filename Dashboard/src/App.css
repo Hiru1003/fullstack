@@ -366,7 +366,7 @@ body {
   font-size: 34px;
 }
 .sidebar svg:hover {
-  background: #fff;
+  background: #eeeeee;
   color: #3939d9f2;
   border-radius: 8px;
   transition: 0.3s;

@@ -13,12 +13,11 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { FaPeopleGroup } from "react-icons/fa6";
 
+
 const Sidebar = () => {
   const [show, setShow] = useState(false);
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-  const navigate = useNavigate();
-
   const handleLogout = async () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (!confirmLogout) return; // If the user cancels, do nothing
@@ -45,59 +44,62 @@ const Sidebar = () => {
     }
   };
 
+  
+
+  const navigateTo = useNavigate();
+
   const gotoHomePage = () => {
-    navigate("/");
+    navigateTo("/");
     setShow(!show);
   };
   const gotoDoctorsPage = () => {
-    navigate("/doctors");
+    navigateTo("/doctors");
     setShow(!show);
   };
   const gotoStaffPage = () => {
-    navigate("/staff");
+    navigateTo("/staff");
     setShow(!show);
   };
   const gotoMessagesPage = () => {
-    navigate("/messages");
+    navigateTo("/messages");
     setShow(!show);
   };
   const gotoAddNewDoctor = () => {
-    navigate("/doctor/addnew");
+    navigateTo("/doctor/addnew");
     setShow(!show);
   };
-  const gotoAddNewStaffMember = () => {
-    navigate("/staff/addnew");
+  const gotoaddNewStaffMember= () => {
+    navigateTo("/staff/addnew");
     setShow(!show);
   };
   const gotoAddNewAdmin = () => {
-    navigate("/admin/addnew");
+    navigateTo("/admin/addnew");
     setShow(!show);
   };
 
   return (
     <>
-      {/* Only show sidebar if user is authenticated */}
-      {isAuthenticated && (
-        <nav className={show ? "show sidebar" : "sidebar"}>
-          <div className="links">
-            <TiHome onClick={gotoHomePage} />
-            <FaUserDoctor onClick={gotoDoctorsPage} />
-            <FaPeopleGroup onClick={gotoStaffPage} />
-            <MdAddModerator onClick={gotoAddNewAdmin} />
-            <IoPersonAddSharp onClick={gotoAddNewDoctor} />
-            <AiOutlineUsergroupAdd onClick={gotoAddNewStaffMember} />
-            <AiFillMessage onClick={gotoMessagesPage} />
-            <RiLogoutBoxFill onClick={handleLogout} />
-          </div>
-        </nav>
-      )}
-      
-      {/* Show hamburger icon only if authenticated */}
-      {isAuthenticated && (
-        <div className="wrapper">
-          <GiHamburgerMenu className="hamburger" onClick={() => setShow(!show)} />
+      <nav
+        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
+        className={show ? "show sidebar" : "sidebar"}
+      >
+        <div className="links">
+          <TiHome onClick={gotoHomePage} />
+          <FaUserDoctor onClick={gotoDoctorsPage} />
+          <FaPeopleGroup onClick={gotoStaffPage}/>
+          <MdAddModerator onClick={gotoAddNewAdmin} />
+          <IoPersonAddSharp onClick={gotoAddNewDoctor} />
+          <AiOutlineUsergroupAdd onClick={gotoaddNewStaffMember} />
+          <AiFillMessage onClick={gotoMessagesPage} />
+          <RiLogoutBoxFill onClick={handleLogout} />
         </div>
-      )}
+      </nav>
+      <div
+        className="wrapper"
+        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
+      >
+        <GiHamburgerMenu className="hamburger" onClick={() => setShow(!show)} />
+      </div>
     </>
   );
 };

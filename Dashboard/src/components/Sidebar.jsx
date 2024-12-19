@@ -18,6 +18,7 @@ const Sidebar = () => {
   const [show, setShow] = useState(false);
 
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  
   const handleLogout = async () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (!confirmLogout) return; // If the user cancels, do nothing
@@ -28,13 +29,13 @@ const Sidebar = () => {
         "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/logout",
         { withCredentials: true } // Ensure cookies are sent with the request
       );
-      
+
       // Show success toast message
       toast.success(response.data.message);
-  
+
       // Update authentication state to false
       setIsAuthenticated(false);
-  
+
       // Redirect to login page after logout
       navigate("/login");
     } catch (error) {

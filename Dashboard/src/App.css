@@ -376,6 +376,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 50px;
+  color: #eeeeee;
 }
 .wrapper {
   display: none;

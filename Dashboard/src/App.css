@@ -375,8 +375,8 @@ body {
 .sidebar .links {
   display: flex;
   flex-direction: column;
-  gap: 50px;
-  color: #eeeeee;
+  gap: 350px;
+  color: #d91010;
 }
 .wrapper {
   display: none;

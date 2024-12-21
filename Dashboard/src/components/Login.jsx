@@ -55,7 +55,7 @@ const AdminLogin = () => {
   
       // Handle successful login
       toast.success(response.data.message);
-      
+      localStorage.setItem("authToken", response.data.token);
       setIsAuthenticated(true);
       navigateTo("/"); // Redirect to the dashboard or appropriate page
     } catch (error) {
@@ -74,7 +74,7 @@ const AdminLogin = () => {
 
   return (
     <>
-      <div className="form-component login-form">
+      <div className="container form-component login-form">
         <br />
         <br />
         <br />

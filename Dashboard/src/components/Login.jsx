@@ -55,7 +55,7 @@ const AdminLogin = () => {
   
       // Handle successful login
       toast.success(response.data.message);
-      localStorage.setItem("authToken", response.data.token);
+      
       setIsAuthenticated(true);
       navigateTo("/"); // Redirect to the dashboard or appropriate page
     } catch (error) {
@@ -74,12 +74,11 @@ const AdminLogin = () => {
 
   return (
     <>
-      <div className="form-component login-form" style={{
-        backgroundColor: "white" }}>
+      <div className="form-component login-form">
         <br />
         <br />
         <br />
-        <h2>Admin Sign Innnn</h2>
+        <h2>Admin Sign In</h2>
         <p>Please Login To Access Admin Resources</p>
         <p>
           Welcome back! Log in to your admin account to manage the platform

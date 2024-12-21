@@ -21,6 +21,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
+      localStorage.removeItem("authToken");
       navigate("/login"); // Redirect to login page
     }
   };

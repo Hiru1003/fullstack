@@ -26,7 +26,7 @@ body {
   
 .page {
   margin-left: 120px;
-  background: #eeeeee;
+  background: #fff;
   padding: 40px;
   height: 100vh;
   border-top-left-radius: 50px;
@@ -367,7 +367,7 @@ body {
 }
 .sidebar svg:hover {
   background: #eeeeee;
-  color: #64c12df2;
+  color: #74d939f2;
   border-radius: 8px;
   transition: 0.3s;
   cursor: pointer;

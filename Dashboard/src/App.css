@@ -372,18 +372,18 @@ body {
   transition: 0.3s;
   cursor: pointer;
 }
-.sidebar .links {
+/* .sidebar .links {
   display: flex;
   flex-direction: column;
   gap: 350px;
-  color: #d91010;
 }
+
 .wrapper {
   display: none;
 }
 .wrapper .hamburger {
   display: none;
-}
+} */
 
 @media (max-width: 1208px) {
   .sidebar {

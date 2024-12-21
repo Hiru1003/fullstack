@@ -58,8 +58,10 @@ const Sidebar = () => {
 
   return (
     <>
-      <nav className={show ? "show sidebar" : "sidebar"} style={isLoginPage ? { display: "none" } : { display: "flex" }}>
-        <div className="links">
+      <nav
+        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
+        className={show ? "show sidebar" : "sidebar"}
+      > <div className="links">
           <TiHome onClick={gotoHomePage} />
           <FaUserDoctor onClick={gotoDoctorsPage} />
           <FaPeopleGroup onClick={gotoStaffPage} />

@@ -15,6 +15,9 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Determine if the current route is login
+  const isLoginPage = location.pathname === "/login";
+
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (!confirmLogout) return;
@@ -53,24 +56,29 @@ const Sidebar = () => {
 
   return (
     <>
-  <nav
-        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
-        className={show ? "show sidebar" : "sidebar"}
-      >
-        <div className="links">
-          <TiHome onClick={gotoHomePage} />
-          <FaUserDoctor onClick={gotoDoctorsPage} />
-          <FaPeopleGroup onClick={gotoStaffPage} />
-          <MdAddModerator onClick={gotoAddNewAdmin} />
-          <IoPersonAddSharp onClick={gotoAddNewDoctor} />
-          <AiOutlineUsergroupAdd onClick={gotoAddNewStaffMember} />
-          <AiFillMessage onClick={gotoMessagesPage} />
-          <RiLogoutBoxFill onClick={handleLogout} />
-        </div>
-      </nav>
-      <div className="wrapper">
-        <GiHamburgerMenu className="hamburger" onClick={() => setShow(!show)} />
-      </div>
+      {/* Conditionally render the sidebar */}
+      {!isLoginPage && (
+        <>
+          <nav className={show ? "show sidebar" : "sidebar"}>
+            <div className="links">
+              <TiHome onClick={gotoHomePage} />
+              <FaUserDoctor onClick={gotoDoctorsPage} />
+              <FaPeopleGroup onClick={gotoStaffPage} />
+              <MdAddModerator onClick={gotoAddNewAdmin} />
+              <IoPersonAddSharp onClick={gotoAddNewDoctor} />
+              <AiOutlineUsergroupAdd onClick={gotoAddNewStaffMember} />
+              <AiFillMessage onClick={gotoMessagesPage} />
+              <RiLogoutBoxFill onClick={handleLogout} />
+            </div>
+          </nav>
+          <div className="wrapper">
+            <GiHamburgerMenu
+              className="hamburger"
+              onClick={() => setShow(!show)}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };

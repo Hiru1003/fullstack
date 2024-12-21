@@ -74,12 +74,12 @@ const AdminLogin = () => {
 
   return (
     <>
-      <div className="page container form-component login-form" style={{
+      <div className="form-component login-form" style={{
         backgroundColor: "white" }}>
         <br />
         <br />
         <br />
-        <h2>Admin Sign In</h2>
+        <h2>Admin Sign Innnn</h2>
         <p>Please Login To Access Admin Resources</p>
         <p>
           Welcome back! Log in to your admin account to manage the platform

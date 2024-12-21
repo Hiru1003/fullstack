@@ -31,14 +31,14 @@ router.post("/doctor/addnew",  addNewDoctor);
 router.post("/staff/addnew", addNewStaffMember);
 router.put("/staff/:id",  editStaffMember);
 router.delete("/staff/:id",  deleteStaffMember);
-router.get("/admin/me",  getUserDetails);
+router.get("/admin/me", isAdminAuthenticated, getUserDetails);
 router.get("/patient/me", isPatientAuthenticated, getUserDetails);
 router.get("/doctors", getAllDoctors);
 router.get("/staff", getAllStaff);
 router.get("/patient/logout", isPatientAuthenticated, logoutPatient);
-router.get("/admin/logout", logoutAdmin);
-router.delete("/doctors/:id",deleteDoctor);
-router.put("/doctors/:id",editDoctor);
+router.get("/admin/logout",  logoutAdmin);
+router.delete("/doctors/:id", deleteDoctor);
+router.put("/doctors/:id", editDoctor);
 // router.delete("/staff/:id",isAdminAuthenticated, deleteStaffMember);
 // router.put("/staff/:id",isAdminAuthenticated, editStaffMember);
 

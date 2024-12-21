@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { TiHome } from "react-icons/ti";
 import { RiLogoutBoxFill } from "react-icons/ri";
 import { AiFillMessage } from "react-icons/ai";
@@ -6,21 +7,18 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { FaUserDoctor } from "react-icons/fa6";
 import { MdAddModerator } from "react-icons/md";
 import { IoPersonAddSharp } from "react-icons/io5";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { FaPeopleGroup } from "react-icons/fa6";
 
 const Sidebar = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (!confirmLogout) return;
 
-    // Perform direct logout and redirect to login
     navigate("/login");
   };
 
@@ -54,14 +52,14 @@ const Sidebar = () => {
   };
 
   // Check if the current path is the login page
-  const isLoginPage = window.location.pathname === "/login";
+  const isLoginPage = location.pathname === "/login";
+
+  if (isLoginPage) return null; // Don't render anything on the login page
 
   return (
     <>
-      <nav
-        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
-        className={show ? "show sidebar" : "sidebar"}
-      > <div className="links">
+      <nav className={show ? "show sidebar" : "sidebar"}>
+        <div className="links">
           <TiHome onClick={gotoHomePage} />
           <FaUserDoctor onClick={gotoDoctorsPage} />
           <FaPeopleGroup onClick={gotoStaffPage} />
@@ -72,7 +70,7 @@ const Sidebar = () => {
           <RiLogoutBoxFill onClick={handleLogout} />
         </div>
       </nav>
-      <div className="wrapper" style={isLoginPage ? { display: "none" } : { display: "flex" }}>
+      <div className="wrapper">
         <GiHamburgerMenu className="hamburger" onClick={() => setShow(!show)} />
       </div>
     </>

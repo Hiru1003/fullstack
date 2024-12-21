@@ -74,7 +74,7 @@ const AdminLogin = () => {
 
   return (
     <>
-      <div className="container form-component login-form">
+      <div className="page container form-component login-form">
         <br />
         <br />
         <br />

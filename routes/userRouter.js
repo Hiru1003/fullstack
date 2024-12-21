@@ -26,19 +26,19 @@ const router = express.Router();
 
 router.post("/patient/register", patientRegister);
 router.post("/login", login);
-router.post("/admin/addnew",isAdminAuthenticated, addNewAdmin);
-router.post("/doctor/addnew", isAdminAuthenticated, addNewDoctor);
-router.post("/staff/addnew", isAdminAuthenticated, addNewStaffMember);
-router.put("/staff/:id", isAdminAuthenticated, editStaffMember);
-router.delete("/staff/:id", isAdminAuthenticated, deleteStaffMember);
-router.get("/admin/me", isAdminAuthenticated, getUserDetails);
+router.post("/admin/addnew", addNewAdmin);
+router.post("/doctor/addnew",  addNewDoctor);
+router.post("/staff/addnew", addNewStaffMember);
+router.put("/staff/:id",  editStaffMember);
+router.delete("/staff/:id",  deleteStaffMember);
+router.get("/admin/me",  getUserDetails);
 router.get("/patient/me", isPatientAuthenticated, getUserDetails);
 router.get("/doctors", getAllDoctors);
 router.get("/staff", getAllStaff);
 router.get("/patient/logout", isPatientAuthenticated, logoutPatient);
-router.get("/admin/logout", isAdminAuthenticated, logoutAdmin);
-router.delete("/doctors/:id",isAdminAuthenticated, deleteDoctor);
-router.put("/doctors/:id",isAdminAuthenticated, editDoctor);
+router.get("/admin/logout", logoutAdmin);
+router.delete("/doctors/:id",deleteDoctor);
+router.put("/doctors/:id",editDoctor);
 // router.delete("/staff/:id",isAdminAuthenticated, deleteStaffMember);
 // router.put("/staff/:id",isAdminAuthenticated, editStaffMember);
 

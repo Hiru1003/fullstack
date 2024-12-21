@@ -16,27 +16,12 @@ const Sidebar = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
-    if (!confirmLogout) return; // If the user cancels, do nothing
+    if (!confirmLogout) return;
 
-    try {
-      // Sending logout request to the backend
-      const response = await axios.get(
-        "https://fullstackmedicare-f7cdb2efe0fa.herokuapp.com/api/v1/user/admin/logout",
-        { withCredentials: true } // Ensure cookies are sent with the request
-      );
-
-      // Show success toast message
-      toast.success(response.data.message);
-
-      // Redirect to login page immediately after logout
-      navigate("/login");
-    } catch (error) {
-      // Handle error
-      const errorMessage = error.response?.data?.message || "Logout failed";
-      toast.error(errorMessage);
-    }
+    // Perform direct logout and redirect to login
+    navigate("/login");
   };
 
   const gotoHomePage = () => {

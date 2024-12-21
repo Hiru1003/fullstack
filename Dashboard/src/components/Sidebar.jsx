@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { TiHome } from "react-icons/ti";
 import { RiLogoutBoxFill } from "react-icons/ri";
@@ -15,25 +15,13 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check if the current path is the login page
+  // Determine if the current route is login
   const isLoginPage = location.pathname === "/login";
-
-  // Simulate authentication check (replace with actual authentication check)
-  const isAuthenticated = localStorage.getItem("authToken"); // Assuming token is stored in localStorage
-
-  useEffect(() => {
-    // Redirect to dashboard if user is already authenticated and tries to access the login page
-    if (isAuthenticated && isLoginPage) {
-      navigate("/dashboard");
-    }
-  }, [isAuthenticated, isLoginPage, navigate]);
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
-      // Clear the authentication token or session (simulated here by clearing localStorage)
-      localStorage.removeItem("authToken");
-      navigate("/login"); // Redirect to login page after logout
+      navigate("/login"); // Redirect to login page
     }
   };
 

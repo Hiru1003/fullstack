@@ -74,8 +74,7 @@ const AdminLogin = () => {
 
   return (
     <>
-      <div className="page container form-component login-form" style={{
-        backgroundColor: "white" }}>
+      <div className="container form-component login-form">
         <br />
         <br />
         <br />

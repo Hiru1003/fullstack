@@ -36,7 +36,7 @@ const App = () => {
       try {
         const authToken = localStorage.getItem("authToken");
         if (!authToken) {
-          throw new Error("No authentication token found.");
+          throw new Error("Login Required");
         }
 
         const response = await axios.get(

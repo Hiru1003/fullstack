@@ -51,14 +51,12 @@ const Sidebar = () => {
     setShow(!show);
   };
 
-  // Check if the current path is the login page
-  const isLoginPage = location.pathname === "/login";
-
-  if (isLoginPage) return null; // Don't render anything on the login page
-
   return (
     <>
-      <nav className={show ? "show sidebar" : "sidebar"}>
+  <nav
+        style={!isAuthenticated ? { display: "none" } : { display: "flex" }}
+        className={show ? "show sidebar" : "sidebar"}
+      >
         <div className="links">
           <TiHome onClick={gotoHomePage} />
           <FaUserDoctor onClick={gotoDoctorsPage} />

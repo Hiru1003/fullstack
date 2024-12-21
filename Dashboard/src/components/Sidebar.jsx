@@ -20,9 +20,9 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
-    if (!confirmLogout) return;
-
-    navigate("/login");
+    if (confirmLogout) {
+      navigate("/login"); // Redirect to login page
+    }
   };
 
   const gotoHomePage = () => {
